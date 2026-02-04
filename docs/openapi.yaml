@@ -371,6 +371,109 @@ paths:
           description: Unauthorized
         '403':
           description: Forbidden
+  
+  /behaviors:
+    post:
+      tags:
+        - behaviors
+      summary: Create a behavior
+      description: This can only be done by the user with `can_manage_behaviors` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BehaviorCreate'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Behavior'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Behavior with this name already exist
+
+    get:
+      tags:
+        - behaviors
+      summary: List all behaviors
+      description: This can only be done by the user with `can_manage_behaviors` permission.
+      responses:
+        '200':
+          description: List of behaviors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Behavior'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /behaviors/{id}:
+    get:
+      tags:
+        - behaviors
+      summary: Get behavior by ID
+      description: This can only be done by the user with `can_manage_behaviors` permission.
+      responses:
+        '200':
+          description: A single behavior
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Behavior'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - behaviors
+      summary: Update a behavior
+      description: This can only be done by the user with `can_manage_behaviors` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BehaviorUpdate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Behavior'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - behaviors
+      summary: Delete behavior
+      description: This can only be done by the user with `can_manage_behaviors` permission.
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
 
 components:
   schemas:
@@ -493,3 +596,18 @@ components:
         comment:
           type: string
           nullable: true
+  
+    Behavior:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    BehaviorCreate:
+      properties:
+        name:
+          type: string
+    BehaviorUpdate:
+      properties:
+        name:
+          type: string
