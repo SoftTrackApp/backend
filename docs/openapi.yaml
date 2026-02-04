@@ -49,6 +49,13 @@ paths:
           description: Forbidden
 
   /users/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
     get:
       tags:
         - users
@@ -106,8 +113,15 @@ paths:
           description: Forbidden
         '404':
           description: Not found
-    
+
   /users/{id}/comments:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
     post:
       tags:
         - users
@@ -131,7 +145,7 @@ paths:
           description: Forbidden
         '404':
           description: Not found
-    
+
     get:
       tags:
         - users
@@ -146,6 +160,59 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/UserComment'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+  /users/{id}/records:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
+    post:
+      tags:
+        - users
+      summary: Create record for a user
+      description: This can only be done by the user with `can_manage_records` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordCreate'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    get:
+      tags:
+        - users
+      summary: List all records of a user
+      description: This can only be done by the user with `can_manage_records` permission.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Record'
         '401':
           description: Unauthorized
         '403':
@@ -212,6 +279,13 @@ paths:
           description: Unauthorized
 
   /groups/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
     get:
       tags:
         - groups
@@ -312,6 +386,13 @@ paths:
           description: Forbidden
 
   /roles/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
     get:
       tags:
         - roles
@@ -454,6 +535,13 @@ paths:
           description: Unauthorized
 
   /behaviors/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
     get:
       tags:
         - behaviors
@@ -551,6 +639,13 @@ paths:
           description: Unauthorized
 
   /behavior-sets/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
     get:
       tags:
         - behavior-sets
@@ -651,6 +746,13 @@ paths:
           description: Forbidden
 
   /skills/{id}:
+    parameters:
+      - name: id
+        in: path
+        schema:
+          type: number
+        required: true
+
     get:
       tags:
         - skills
@@ -725,6 +827,7 @@ components:
           nullable: true
         role_id:
           type: number
+          nullable: true
         groups:
           type: array
           items:
@@ -816,8 +919,6 @@ components:
           type: string
         creator_user_id:
           type: number
-        target_user_id:
-          type: number
         behavior_id:
           type: number
         comment:
@@ -829,8 +930,6 @@ components:
       properties:
         name:
           type: string
-        target_user_id:
-          type: number
         behavior_id:
           type: number
         comment:
@@ -917,7 +1016,7 @@ components:
           type: array
           items:
             type: number
-    
+
     UserComment:
       properties:
         id:
