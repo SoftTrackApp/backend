@@ -80,7 +80,7 @@ paths:
               $ref: '#/components/schemas/UserUpdate'
       responses:
         '200':
-          description: User updated
+          description: Success
           content:
             application/json:
               schema:
@@ -147,7 +147,7 @@ paths:
         '403':
           description: Forbidden
         '409':
-          description: Group with this name already exist
+          description: Object with this name already exists
 
     get:
       tags:
@@ -200,7 +200,7 @@ paths:
               $ref: '#/components/schemas/GroupUpdate'
       responses:
         '200':
-          description: Group updated
+          description: Success
           content:
             application/json:
               schema:
@@ -250,7 +250,7 @@ paths:
         '403':
           description: Forbidden
         '409':
-          description: Role with this name already exist
+          description: Object with this name already exists
 
     get:
       tags:
@@ -303,7 +303,7 @@ paths:
               $ref: '#/components/schemas/RoleUpdate'
       responses:
         '200':
-          description: Role updated
+          description: Success
           content:
             application/json:
               schema:
@@ -371,7 +371,7 @@ paths:
           description: Unauthorized
         '403':
           description: Forbidden
-  
+
   /behaviors:
     post:
       tags:
@@ -395,7 +395,7 @@ paths:
         '403':
           description: Forbidden
         '409':
-          description: Behavior with this name already exist
+          description: Object with this name already exists
 
     get:
       tags:
@@ -463,8 +463,111 @@ paths:
     delete:
       tags:
         - behaviors
-      summary: Delete behavior
+      summary: Delete a behavior
       description: This can only be done by the user with `can_manage_behaviors` permission.
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+  /skills:
+    post:
+      tags:
+        - skills
+      summary: Create a skill
+      description: This can only be done by the user with `can_manage_skills` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillCreate'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Object with this name already exists
+
+    get:
+      tags:
+        - skills
+      summary: List all skills
+      description: This can only be done by the user with `can_manage_skills` permission.
+      responses:
+        '200':
+          description: List of skills
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Skill'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /skills/{id}:
+    get:
+      tags:
+        - skills
+      summary: Get skill by ID
+      description: This can only be done by the user with `can_manage_skills` permission.
+      responses:
+        '200':
+          description: A single skill
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - skills
+      summary: Update a skill
+      description: This can only be done by the user with `can_manage_skills` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SkillUpdate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Skill'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - skills
+      summary: Delete a skill
+      description: This can only be done by the user with `can_manage_skills` permission.
       responses:
         '200':
           description: Success
@@ -596,18 +699,57 @@ components:
         comment:
           type: string
           nullable: true
-  
+
     Behavior:
       properties:
         id:
           type: integer
         name:
           type: string
+        skills:
+          type: array
+          items:
+            type: number
     BehaviorCreate:
       properties:
         name:
           type: string
+        skills:
+          type: array
+          items:
+            type: number
     BehaviorUpdate:
       properties:
         name:
           type: string
+        skills:
+          type: array
+          items:
+            type: number
+
+    Skill:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        behaviors:
+          type: array
+          items:
+            type: number
+    SkillCreate:
+      properties:
+        name:
+          type: string
+        behaviors:
+          type: array
+          items:
+            type: number
+    SkillUpdate:
+      properties:
+        name:
+          type: string
+        behaviors:
+          type: array
+          items:
+            type: number
