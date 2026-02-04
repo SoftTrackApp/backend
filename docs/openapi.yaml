@@ -598,6 +598,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Group'
+        records:
+          type: array
+          items:
+            $ref: '#/components/schemas/Record'
     UserCreate:
       properties:
         username:
@@ -679,9 +683,11 @@ components:
           type: integer
         name:
           type: string
-        group_id:
+        creator_user_id:
           type: number
-        behavior_set_id:
+        target_user_id:
+          type: number
+        behavior_id:
           type: number
         comment:
           type: string
@@ -692,9 +698,9 @@ components:
       properties:
         name:
           type: string
-        group_id:
+        target_user_id:
           type: number
-        behavior_set_id:
+        behavior_id:
           type: number
         comment:
           type: string
