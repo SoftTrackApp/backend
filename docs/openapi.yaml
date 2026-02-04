@@ -183,7 +183,7 @@ paths:
               $ref: '#/components/schemas/GroupUpdate'
       responses:
         '200':
-          description: User updated
+          description: Group updated
           content:
             application/json:
               schema:
@@ -200,6 +200,109 @@ paths:
         - groups
       summary: Delete group
       description: This can only be done by the user with `can_manage_groups` permission.
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+  /roles:
+    post:
+      tags:
+        - roles
+      summary: Create role
+      description: This can only be done by the user with `can_manage_roles` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreate'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Role with this name already exist
+
+    get:
+      tags:
+        - roles
+      summary: List all roles
+      description: This can only be done by the user with `can_manage_roles` permission.
+      responses:
+        '200':
+          description: List of roles
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /roles/{id}:
+    get:
+      tags:
+        - roles
+      summary: Get role by ID
+      description: This can only be done by the user with `can_manage_roles` permission.
+      responses:
+        '200':
+          description: A single role
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - roles
+      summary: Update role
+      description: This can only be done by the user with `can_manage_roles` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleUpdate'
+      responses:
+        '200':
+          description: Role updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - roles
+      summary: Delete role
+      description: This can only be done by the user with `can_manage_roles` permission.
       responses:
         '200':
           description: Success
@@ -272,3 +375,18 @@ components:
         users:
           items:
             type: number
+
+    Role:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+    RoleCreate:
+      properties:
+        name:
+          type: string
+    RoleUpdate:
+      properties:
+        name:
+          type: string
