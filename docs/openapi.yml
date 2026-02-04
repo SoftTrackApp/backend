@@ -10,6 +10,12 @@ paths:
       tags:
         - users
 
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableUser"
+
       responses:
         "201":
           description: Created
@@ -52,10 +58,33 @@ paths:
           type: integer
           format: int64
 
+    get:
+      summary: Get one user
+      tags:
+        - users
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
     put:
       summary: Update user
       tags:
         - users
+
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableUser"
 
       responses:
         "200":
@@ -86,37 +115,54 @@ paths:
 
       responses:
         "200":
-          description: OK (JWT token has been saved in cookie)
+          description: OK
         "401":
-          description: Invalid email or password
-
-  /boards:
+          description: Unauthorized (invalid username or password)
+  
+  /roles:
     post:
-      summary: Create a board
+      summary: Create a role
       tags:
-        - boards
+        - roles
+
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableRole"
 
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
+
     get:
-      summary: Get list of boards
-      tags: 
-        - boards
+      summary: Get list of roles
+      tags:
+        - roles
 
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Role"
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
 
-  /boards/{id}:
+  /roles/{id}:
     parameters: 
       - name: id
         in: path
@@ -126,9 +172,32 @@ paths:
           format: int64
 
     get:
-      summary: Get board
-      tags: 
-        - boards
+      summary: Get one role
+      tags:
+        - roles
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Role"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+    put:
+      summary: Update role
+      tags:
+        - roles
+
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableRole"
 
       responses:
         "200":
@@ -137,22 +206,11 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
-    put:
-      summary: Update a board
-      tags:
-        - boards
 
-      responses:
-        "201":
-          description: Created
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
     delete:
-      summary: Delete a board
-      tags: 
-        - boards
+      summary: Delete role
+      tags:
+        - roles
 
       responses:
         "200":
@@ -168,28 +226,45 @@ paths:
       tags:
         - groups
 
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableGroup"
+
       responses:
         "201":
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
+
     get:
       summary: Get list of groups
-      tags: 
+      tags:
         - groups
 
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Group"
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
 
   /groups/{id}:
-    parameters:
+    parameters: 
       - name: id
         in: path
         required: true
@@ -198,32 +273,44 @@ paths:
           format: int64
 
     get:
-      summary: Get group
-      tags: 
-        - groups
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    put:
-      summary: Update a group
+      summary: Get one group
       tags:
         - groups
 
       responses:
-        "201":
-          description: Created
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Group"
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
+
+    put:
+      summary: Update group
+      tags:
+        - groups
+
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableGroup"
+
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
     delete:
-      summary: Delete a group
-      tags: 
+      summary: Delete group
+      tags:
         - groups
 
       responses:
@@ -233,12 +320,18 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
-  
+
   /behaviors:
     post:
       summary: Create a behavior
       tags:
         - behaviors
+
+      requestBody:
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableBehavior"
 
       responses:
         "201":
@@ -251,21 +344,28 @@ paths:
           description: Unauthorized
         "403":
           description: Forbidden
+
     get:
       summary: Get list of behaviors
-      tags: 
+      tags:
         - behaviors
 
       responses:
         "200":
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Behavior"
         "401":
           description: Unauthorized
         "403":
           description: Forbidden
 
   /behaviors/{id}:
-    parameters:
+    parameters: 
       - name: id
         in: path
         required: true
@@ -274,195 +374,49 @@ paths:
           format: int64
 
     get:
-      summary: Get behavior
-      tags: 
+      summary: Get one behavior
+      tags:
+        - behaviors
+
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Behavior"
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+    put:
+      summary: Update behavior
+      tags:
+        - behaviors
+
+      requestBody: 
+        content: 
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditableBehavior"
+
+      responses:
+        "200":
+          description: OK
+        "401":
+          description: Unauthorized
+        "403":
+          description: Forbidden
+
+    delete:
+      summary: Delete behavior
+      tags:
         - behaviors
 
       responses:
         "200":
           description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    put:
-      summary: Update a behavior
-      tags:
-        - behaviors
-
-      responses:
-        "201":
-          description: Created
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    delete:
-      summary: Delete a behavior
-      tags: 
-        - behaviors
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /behaviorSets:
-    post:
-      summary: Create a behavior set
-      tags:
-        - behaviorSets
-
-      responses:
-        "201":
-          description: Created
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    get:
-      summary: Get list of behavior sets
-      tags: 
-        - behaviorSets
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /behaviorSets/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
-    get:
-      summary: Get behavior set
-      tags: 
-        - behaviorSets
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    put:
-      summary: Update a behavior set
-      tags:
-        - behaviorSets
-
-      responses:
-        "201":
-          description: Created
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    delete:
-      summary: Delete a behavior set
-      tags: 
-        - behaviorSets
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-  
-  /skills:
-    post:
-      summary: Create a skill
-      tags:
-        - skills
-
-      responses:
-        "201":
-          description: Created
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    get:
-      summary: Get list of behaviors
-      tags: 
-        - skills
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /skills/{id}:
-    parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
-    get:
-      summary: Get behavior
-      tags: 
-        - skills
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    put:
-      summary: Update a behavior
-      tags:
-        - skills
-
-      responses:
-        "201":
-          description: Created
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    delete:
-      summary: Delete a behavior
-      tags: 
-        - skills
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-    
-  /ratings:
-    post:
-      summary: Rate user
-      tags:
-        - ratings
-
-      responses:
-        "201":
-          description: Created
         "401":
           description: Unauthorized
         "403":
@@ -477,27 +431,82 @@ components:
           type: integer
         username:
           type: string
-        group_id:
+        first_name:
+          type: string
+        last_name:
+          type: string
+        groups:
+          type: array
+          items: 
+            type: number
+        role_id:
           type: integer
+    EditableUser:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        groups:
+          type: array
+          items:
+            type: number
+        role_id:
+          type: number
     
-    Board:
+    Role:
       type: object
       properties:
         id:
-          type: integer
+          type: number
         name:
           type: string
-        behaviorSetId:
+        permission_bits:
           type: number
+    EditableRole:
+      type: object
+      properties:
+        name:
+          type: string
+        permission_bits:
+          type: number
+          description: May change later
+    
+    Group:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        users:
+          type: array
+          items: 
+            type: number
+    EditableGroup:
+      type: object
+      properties: 
+        name:
+          type: string
     
     Behavior:
       type: object
       properties:
         id:
-          type: integer
+          type: number
         name:
           type: string
-        behaviorSetId:
-          type: number
-        skillId:
-          type: number
+        users:
+          type: array
+          items: 
+            type: number
+    EditableBehavior:
+      type: object
+      properties: 
+        name:
+          type: string
