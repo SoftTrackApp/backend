@@ -1,7 +1,7 @@
 openapi: 3.0.4
 info:
   title: SoftTrack API
-  version: 0.1.0
+  version: 0.1.1
 
 paths:
   /users:
@@ -313,6 +313,48 @@ paths:
         '404':
           description: Not found
 
+  /records:
+    post:
+      tags:
+        - records
+      summary: Create record
+      description: This can only be done by the user with `can_manage_records` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordCreate'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+    get:
+      tags:
+        - records
+      summary: List all records
+      description: This can only be done by the user with `can_manage_records` permission.
+      responses:
+        '200':
+          description: List of records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Record'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
 components:
   schemas:
     User:
@@ -327,6 +369,8 @@ components:
         last_name:
           type: string
           nullable: true
+        role_id:
+          type: number
     UserCreate:
       properties:
         username:
@@ -339,6 +383,9 @@ components:
         last_name:
           type: string
           nullable: true
+        role_id:
+          type: number
+          nullable: true
     UserUpdate:
       properties:
         username:
@@ -348,6 +395,9 @@ components:
           nullable: true
         last_name:
           type: string
+          nullable: true
+        role_id:
+          type: number
           nullable: true
 
     Group:
@@ -390,3 +440,30 @@ components:
       properties:
         name:
           type: string
+    
+    Record:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        group_id:
+          type: number
+        behavior_set_id:
+          type: number
+        comment:
+          type: string
+          nullable: true
+        created_at:
+          type: number
+    RecordCreate:
+      properties:
+        name:
+          type: string
+        group_id:
+          type: number
+        behavior_set_id:
+          type: number
+        comment:
+          type: string
+          nullable: true
