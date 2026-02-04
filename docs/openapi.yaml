@@ -153,7 +153,6 @@ paths:
       tags:
         - groups
       summary: List all groups
-      description: This can only be done by the user with `can_manage_groups` permission.
       responses:
         '200':
           description: List of groups
@@ -165,15 +164,12 @@ paths:
                   $ref: '#/components/schemas/Group'
         '401':
           description: Unauthorized
-        '403':
-          description: Forbidden
 
   /groups/{id}:
     get:
       tags:
         - groups
       summary: Get group by ID
-      description: This can only be done by the user with `can_manage_groups` permission.
       responses:
         '200':
           description: A single group
@@ -183,8 +179,6 @@ paths:
                 $ref: '#/components/schemas/Group'
         '401':
           description: Unauthorized
-        '403':
-          description: Forbidden
         '404':
           description: Not found
 
@@ -401,7 +395,6 @@ paths:
       tags:
         - behaviors
       summary: List all behaviors
-      description: This can only be done by the user with `can_manage_behaviors` permission.
       responses:
         '200':
           description: List of behaviors
@@ -413,15 +406,12 @@ paths:
                   $ref: '#/components/schemas/Behavior'
         '401':
           description: Unauthorized
-        '403':
-          description: Forbidden
 
   /behaviors/{id}:
     get:
       tags:
         - behaviors
       summary: Get behavior by ID
-      description: This can only be done by the user with `can_manage_behaviors` permission.
       responses:
         '200':
           description: A single behavior
@@ -431,8 +421,6 @@ paths:
                 $ref: '#/components/schemas/Behavior'
         '401':
           description: Unauthorized
-        '403':
-          description: Forbidden
         '404':
           description: Not found
 
@@ -465,6 +453,103 @@ paths:
         - behaviors
       summary: Delete a behavior
       description: This can only be done by the user with `can_manage_behaviors` permission.
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+  /behavior-sets:
+    post:
+      tags:
+        - behavior-sets
+      summary: Create a behavior set
+      description: This can only be done by the user with `can_manage_behavior_sets` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BehaviorSetCreate'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BehaviorSet'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Object with this name already exists
+
+    get:
+      tags:
+        - behavior-sets
+      summary: List all behavior sets
+      responses:
+        '200':
+          description: List of behavior sets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BehaviorSet'
+        '401':
+          description: Unauthorized
+
+  /behavior-sets/{id}:
+    get:
+      tags:
+        - behavior-sets
+      summary: Get behavior set by ID
+      responses:
+        '200':
+          description: A single behavior set
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BehaviorSet'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - behavior-sets
+      summary: Update a behavior set
+      description: This can only be done by the user with `can_manage_behavior_sets` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BehaviorSetUpdate'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BehaviorSet'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - behavior-sets
+      summary: Delete a behavior set
+      description: This can only be done by the user with `can_manage_behavior_sets` permission.
       responses:
         '200':
           description: Success
@@ -729,6 +814,33 @@ components:
         name:
           type: string
         skills:
+          type: array
+          items:
+            type: number
+
+    BehaviorSet:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        behaviors:
+          type: array
+          items:
+            $ref: '#/components/schemas/Behavior'
+    BehaviorSetCreate:
+      properties:
+        name:
+          type: string
+        behaviors:
+          type: array
+          items:
+            type: number
+    BehaviorSetUpdate:
+      properties:
+        name:
+          type: string
+        behaviors:
           type: array
           items:
             type: number
