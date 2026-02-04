@@ -107,6 +107,23 @@ paths:
         '404':
           description: Not found
 
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Log into user account
+      description: Saves JWT token in the cookie if logged in successfully.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogin'
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+
   /groups:
     post:
       tags:
@@ -371,6 +388,10 @@ components:
           nullable: true
         role_id:
           type: number
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/Group'
     UserCreate:
       properties:
         username:
@@ -386,6 +407,11 @@ components:
         role_id:
           type: number
           nullable: true
+        groups:
+          type: array
+          items:
+            type: number
+          nullable: true
     UserUpdate:
       properties:
         username:
@@ -399,6 +425,17 @@ components:
         role_id:
           type: number
           nullable: true
+        groups:
+          type: array
+          items:
+            type: number
+          nullable: true
+    UserLogin:
+      properties:
+        username:
+          type: string
+        password:
+          type: string
 
     Group:
       properties:
@@ -406,25 +443,14 @@ components:
           type: integer
         name:
           type: string
-        users:
-          type: array
-          items:
-            $ref: '#/components/schemas/User'
     GroupCreate:
       properties:
         name:
           type: string
-        users:
-          type: array
-          items:
-            type: number
     GroupUpdate:
       properties:
         name:
           type: string
-        users:
-          items:
-            type: number
 
     Role:
       properties:
@@ -440,7 +466,7 @@ components:
       properties:
         name:
           type: string
-    
+
     Record:
       properties:
         id:
