@@ -6,426 +6,110 @@ info:
 paths:
   /users:
     post:
-      summary: Create a user
       tags:
         - users
-
+      summary: Create user
+      description: This can only be done by the user with `can_manage_users` permission.
       requestBody:
-        content: 
+        content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EditableUser"
-
+              $ref: '#/components/schemas/UserCreate'
       responses:
-        "201":
-          description: Created
+        '201':
+          description: Success
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "401":
+                $ref: '#/components/schemas/User'
+        '401':
           description: Unauthorized
-        "403":
+        '403':
           description: Forbidden
-        "409":
-          description: Username is already taken
+        '409':
+          description: Username is taken already
 
     get:
-      summary: Get list of users
       tags:
         - users
-
+      summary: List all users
+      description: This can only be done by the user with `can_manage_users` permission.
       responses:
-        "200":
-          description: OK
+        '200':
+          description: List of users
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/User"
-        "401":
+                  $ref: '#/components/schemas/User'
+        '401':
           description: Unauthorized
-        "403":
+        '403':
           description: Forbidden
 
   /users/{id}:
-    parameters: 
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
     get:
-      summary: Get one user
       tags:
         - users
-
+      summary: Get user by ID
+      description: This can only be done by the user with `can_manage_users` permission.
       responses:
-        "200":
-          description: OK
+        '200':
+          description: A single user
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
-        "401":
+                $ref: '#/components/schemas/User'
+        '401':
           description: Unauthorized
-        "403":
+        '403':
           description: Forbidden
+        '404':
+          description: Not found
 
     put:
-      summary: Update user
       tags:
         - users
-
-      requestBody: 
-        content: 
+      summary: Update user information
+      description: This can only be done by the user with `can_manage_users` permission.
+      requestBody:
+        content:
           application/json:
             schema:
-              $ref: "#/components/schemas/EditableUser"
-
+              $ref: '#/components/schemas/UserUpdate'
       responses:
-        "200":
-          description: OK
-        "401":
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
           description: Unauthorized
-        "403":
+        '403':
           description: Forbidden
+        '404':
+          description: Not found
 
     delete:
+      tags:
+        - users
       summary: Delete user
-      tags:
-        - users
-
+      description: This can only be done by the user with `can_manage_users` permission.
       responses:
-        "200":
-          description: OK
-        "401":
+        '200':
+          description: Success
+        '401':
           description: Unauthorized
-        "403":
+        '403':
           description: Forbidden
-
-  /users/login:
-    post:
-      summary: Log into user account
-      tags:
-        - users
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized (invalid username or password)
-  
-  /roles:
-    post:
-      summary: Create a role
-      tags:
-        - roles
-
-      requestBody:
-        content: 
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EditableRole"
-
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Role"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    get:
-      summary: Get list of roles
-      tags:
-        - roles
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Role"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /roles/{id}:
-    parameters: 
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
-    get:
-      summary: Get one role
-      tags:
-        - roles
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Role"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    put:
-      summary: Update role
-      tags:
-        - roles
-
-      requestBody: 
-        content: 
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EditableRole"
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    delete:
-      summary: Delete role
-      tags:
-        - roles
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /groups:
-    post:
-      summary: Create a group
-      tags:
-        - groups
-
-      requestBody:
-        content: 
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EditableGroup"
-
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Group"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    get:
-      summary: Get list of groups
-      tags:
-        - groups
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Group"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /groups/{id}:
-    parameters: 
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
-    get:
-      summary: Get one group
-      tags:
-        - groups
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Group"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    put:
-      summary: Update group
-      tags:
-        - groups
-
-      requestBody: 
-        content: 
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EditableGroup"
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    delete:
-      summary: Delete group
-      tags:
-        - groups
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /behaviors:
-    post:
-      summary: Create a behavior
-      tags:
-        - behaviors
-
-      requestBody:
-        content: 
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EditableBehavior"
-
-      responses:
-        "201":
-          description: Created
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Behavior"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    get:
-      summary: Get list of behaviors
-      tags:
-        - behaviors
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Behavior"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-  /behaviors/{id}:
-    parameters: 
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-          format: int64
-
-    get:
-      summary: Get one behavior
-      tags:
-        - behaviors
-
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Behavior"
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    put:
-      summary: Update behavior
-      tags:
-        - behaviors
-
-      requestBody: 
-        content: 
-          application/json:
-            schema:
-              $ref: "#/components/schemas/EditableBehavior"
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
-
-    delete:
-      summary: Delete behavior
-      tags:
-        - behaviors
-
-      responses:
-        "200":
-          description: OK
-        "401":
-          description: Unauthorized
-        "403":
-          description: Forbidden
+        '404':
+          description: Not found
 
 components:
   schemas:
     User:
-      type: object
       properties:
         id:
           type: integer
@@ -433,16 +117,11 @@ components:
           type: string
         first_name:
           type: string
+          nullable: true
         last_name:
           type: string
-        groups:
-          type: array
-          items: 
-            type: number
-        role_id:
-          type: integer
-    EditableUser:
-      type: object
+          nullable: true
+    UserCreate:
       properties:
         username:
           type: string
@@ -450,63 +129,17 @@ components:
           type: string
         first_name:
           type: string
+          nullable: true
         last_name:
           type: string
-        groups:
-          type: array
-          items:
-            type: number
-        role_id:
-          type: number
-    
-    Role:
-      type: object
+          nullable: true
+    UserUpdate:
       properties:
-        id:
-          type: number
-        name:
+        username:
           type: string
-        permission_bits:
-          type: number
-    EditableRole:
-      type: object
-      properties:
-        name:
+        first_name:
           type: string
-        permission_bits:
-          type: number
-          description: May change later
-    
-    Group:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
+          nullable: true
+        last_name:
           type: string
-        users:
-          type: array
-          items: 
-            type: number
-    EditableGroup:
-      type: object
-      properties: 
-        name:
-          type: string
-    
-    Behavior:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        users:
-          type: array
-          items: 
-            type: number
-    EditableBehavior:
-      type: object
-      properties: 
-        name:
-          type: string
+          nullable: true
