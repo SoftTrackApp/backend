@@ -107,6 +107,109 @@ paths:
         '404':
           description: Not found
 
+  /groups:
+    post:
+      tags:
+        - groups
+      summary: Create group
+      description: This can only be done by the user with `can_manage_groups` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupCreate'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '409':
+          description: Group with this name already exist
+
+    get:
+      tags:
+        - groups
+      summary: List all groups
+      description: This can only be done by the user with `can_manage_groups` permission.
+      responses:
+        '200':
+          description: List of groups
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+
+  /groups/{id}:
+    get:
+      tags:
+        - groups
+      summary: Get group by ID
+      description: This can only be done by the user with `can_manage_groups` permission.
+      responses:
+        '200':
+          description: A single group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    put:
+      tags:
+        - groups
+      summary: Update group
+      description: This can only be done by the user with `can_manage_groups` permission.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GroupUpdate'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Group'
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
+    delete:
+      tags:
+        - groups
+      summary: Delete group
+      description: This can only be done by the user with `can_manage_groups` permission.
+      responses:
+        '200':
+          description: Success
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not found
+
 components:
   schemas:
     User:
@@ -143,3 +246,29 @@ components:
         last_name:
           type: string
           nullable: true
+
+    Group:
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/User'
+    GroupCreate:
+      properties:
+        name:
+          type: string
+        users:
+          type: array
+          items:
+            type: number
+    GroupUpdate:
+      properties:
+        name:
+          type: string
+        users:
+          items:
+            type: number
