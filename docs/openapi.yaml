@@ -813,7 +813,7 @@ components:
         role_id:
           type: number
           nullable: true
-        groups:
+        group_ids:
           type: array
           items:
             type: number
@@ -831,7 +831,7 @@ components:
         role_id:
           type: number
           nullable: true
-        groups:
+        group_ids:
           type: array
           items:
             type: number
@@ -945,7 +945,7 @@ components:
       properties:
         name:
           type: string
-        behaviors:
+        behavior_ids:
           type: array
           items:
             type: number
@@ -953,7 +953,7 @@ components:
       properties:
         name:
           type: string
-        behaviors:
+        behavior_ids:
           type: array
           items:
             type: number
@@ -972,7 +972,7 @@ components:
       properties:
         name:
           type: string
-        behaviors:
+        behavior_ids:
           type: array
           items:
             type: number
@@ -980,7 +980,7 @@ components:
       properties:
         name:
           type: string
-        behaviors:
+        behavior_ids:
           type: array
           items:
             type: number
