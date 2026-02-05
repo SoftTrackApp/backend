@@ -3,6 +3,10 @@ info:
   title: SoftTrack API
   version: 0.1.1
 
+servers:
+  - url: http://localhost:8080
+    description: For local development only
+
 paths:
   /users:
     post:
