@@ -1,22 +1,46 @@
 package ru.softtrack.entity;
 
-import java.sql.Timestamp;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "records")
 public class Record {
+    
+    @Id
+    private Integer id;
     private String title;
-    private String receiverId;
-    private String creatorId;
-    private int behaviorId;
+    
+    @ManyToOne
+    @JoinColumn(name = "receiver_id")
+    private User receiver;
+    
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    private User creator;
+    private Integer behaviorId;
     private String comment;
-    private Timestamp createdAt;
+    private LocalDateTime createdAt;
 
-    public Record(String title, String receiverId, String creatorId, int behaviorId, String comment, Timestamp createdAt) {
+    public Record() {
+    }
+    
+    public Record(Integer id, String title, User receiver, User creator, Integer behaviorId, String comment, LocalDateTime createdAt) {
+        this.id = id;
         this.title = title;
-        this.receiverId = receiverId;
-        this.creatorId = creatorId;
+        this.receiver = receiver;
+        this.creator = creator;
         this.behaviorId = behaviorId;
         this.comment = comment;
         this.createdAt = createdAt;
+    }
+    
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -27,27 +51,27 @@ public class Record {
         this.title = title;
     }
 
-    public String getReceiverId() {
-        return receiverId;
+    public User getReceiver() {
+        return receiver;
     }
 
-    public void setReceiverId(String receiverId) {
-        this.receiverId = receiverId;
+    public void setReceiver(User receiver) {
+        this.receiver = receiver;
     }
 
-    public String getCreatorId() {
-        return creatorId;
+    public User getCreator() {
+        return creator;
     }
 
-    public void setCreatorId(String creatorId) {
-        this.creatorId = creatorId;
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 
-    public int getBehaviorId() {
+    public Integer getBehaviorId() {
         return behaviorId;
     }
 
-    public void setBehaviorId(int behaviorId) {
+    public void setBehaviorId(Integer behaviorId) {
         this.behaviorId = behaviorId;
     }
 
@@ -59,13 +83,13 @@ public class Record {
         this.comment = comment;
     }
 
-    public Timestamp getCreatedAt() {
+    public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Timestamp createdAt) {
+    public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    
+
     
 }
