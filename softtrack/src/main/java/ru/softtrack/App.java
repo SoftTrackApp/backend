@@ -13,18 +13,10 @@ public class App {
         SpringApplication.run(App.class, args);
     }
     @Bean
-    public CommandLineRunner connectoToDatabase(DataSource dataSource) {
+    public CommandLineRunner connectToDatabase(DataSource dataSource) {
         return args -> {
         try (Connection connection = dataSource.getConnection()) {
-//        DbConfig dbConfig = new DbConfig();
-//        String url = dbConfig.getUrl();
-//        String user = dbConfig.getUser();
-//        String password = dbConfig.getPassword();
-//        ConnectionFactory connectionFactory = new HikariDataSourceConnectionFactory(url,user,password);
-//        try {
-//            Connection connection = connectionFactory.getNewConnection();
             System.out.println(connection.isValid(0));
-            connection.close();
         } catch (Exception e) {
             System.out.println(e);
         }
