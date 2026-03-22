@@ -2,11 +2,14 @@ package ru.softtrack;
 
 import java.sql.Connection;
 import javax.sql.DataSource;
+
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+@Slf4j
 @SpringBootApplication
 public class App {
     public static void main(String[] args) {
@@ -15,11 +18,11 @@ public class App {
     @Bean
     public CommandLineRunner connectToDatabase(DataSource dataSource) {
         return args -> {
-        try (Connection connection = dataSource.getConnection()) {
-            System.out.println(connection.isValid(0));
-        } catch (Exception e) {
-            System.out.println(e);
-        }
+            try (Connection connection = dataSource.getConnection()) {
+                System.out.println(connection.isValid(0));
+            } catch (Exception e) {
+                log.error("e: ", e);
+            }
         };
     }
 }

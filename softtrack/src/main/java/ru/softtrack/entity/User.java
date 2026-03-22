@@ -32,14 +32,14 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     private Set<Group> groups = new HashSet<>();
-    
+
+    //TODO delete OneToMany relationships?
     @OneToMany(mappedBy = "receiver")
     private Set<Record> receivedRecords = new HashSet<>();
     
     @OneToMany(mappedBy = "creator")
     private Set<Record> createdRecords = new HashSet<>();
-    
-    
+
     
     public String getLogin() {
         return id;
