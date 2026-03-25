@@ -1,11 +1,16 @@
 package ru.softtrack.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name="users")
+@Getter
+@Setter
 public class User {
     @Id
     private String id;
@@ -40,38 +45,6 @@ public class User {
     @OneToMany(mappedBy = "creator")
     private Set<Record> createdRecords = new HashSet<>();
 
-    
-    public String getLogin() {
-        return id;
-    }
-
-    public void setLogin(String id) {
-        this.id = id;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-    
-    public String getFName() {
-        return fName;
-    }
-
-    public void setFName(String fName) {
-        this.fName = fName;
-    }
-
-    public String getLName() {
-        return lName;
-    }
-
-    public void setLName(String lName) {
-        this.lName = lName;
-    }
 
     public Set<Record> getReceivedRecords() {
         return receivedRecords;
