@@ -56,15 +56,19 @@ components:
     Session:
       type: object
       properties:
-        id:
-          type: number
-        username:
+        login:
+          type: string
+        first_name:
+          type: string
+        last_name:
+          type: string
+        role:
           type: string
 
     SessionCreate:
       type: object
       properties:
-        username:
+        login:
           type: string
         password:
           type: string
