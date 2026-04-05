@@ -46,7 +46,7 @@ public class JwtService {
             .getPayload();
     }
 
-    public boolean isValidToken(String token) {
+    public boolean validateToken(String token) {
         try {
             parseClaims(token);
             return true;

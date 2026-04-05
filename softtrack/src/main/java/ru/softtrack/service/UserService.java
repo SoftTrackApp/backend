@@ -2,7 +2,7 @@ package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.softtrack.entity.User;
+import ru.softtrack.entity.UserEntity;
 import ru.softtrack.repository.UserRepository;
 
 @Service
@@ -11,7 +11,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User findUserById(String id) {
+    public UserEntity findUserById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found: " + id));
     }

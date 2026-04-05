@@ -24,7 +24,7 @@ public class Role extends BaseDictionary{
     private Set<Permission> permissions = new HashSet<>();
     
     @OneToMany(mappedBy = "role")
-    private Set<User> users = new HashSet<>();
+    private Set<UserEntity> users = new HashSet<>();
 
     public Set<Permission> getPermissions() {
         return permissions;
@@ -34,11 +34,11 @@ public class Role extends BaseDictionary{
         this.permissions = permissions;
     }
 
-    public Set<User> getUsers() {
+    public Set<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(Set<UserEntity> users) {
         this.users = users;
     }
     

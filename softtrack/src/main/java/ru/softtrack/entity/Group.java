@@ -16,13 +16,13 @@ public class Group extends BaseDictionary{
     }
     
     @ManyToMany(mappedBy = "groups")
-    Set<User> users = new HashSet<>();
+    Set<UserEntity> users = new HashSet<>();
 
-    public Set<User> getUsers() {
+    public Set<UserEntity> getUsers() {
         return users;
     }
 
-    public void setUsers(Set<User> users) {
+    public void setUsers(Set<UserEntity> users) {
         this.users = users;
     }
     

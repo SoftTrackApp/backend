@@ -34,7 +34,7 @@ public class JwtServiceTest {
             
         }
 
-        boolean isValid = shortLived.isValidToken(token);
+        boolean isValid = shortLived.validateToken(token);
 
         assertFalse(isValid);
     }
@@ -45,7 +45,7 @@ public class JwtServiceTest {
         String token = jwtService.generateToken(user);
         assertNotNull(token);
 
-        if (jwtService.isValidToken(token)) {
+        if (jwtService.validateToken(token)) {
             userToken = jwtService.extractUserId(token);
         }
 

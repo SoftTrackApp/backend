@@ -11,7 +11,7 @@ import java.util.Set;
 @Table(name="users")
 @Getter
 @Setter
-public class User {
+public class UserEntity {
     @Id
     private String id;
     
@@ -21,10 +21,10 @@ public class User {
     private String fName;
     private String lName;
 
-    public User() {
+    public UserEntity() {
     }
     
-    public User(String id, String fName, String lName) {
+    public UserEntity(String id, String fName, String lName) {
         this.id = id;
         this.fName = fName;
         this.lName = lName;

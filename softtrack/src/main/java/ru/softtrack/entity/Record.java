@@ -13,11 +13,11 @@ public class Record {
     
     @ManyToOne
     @JoinColumn(name = "receiver_id")
-    private User receiver;
+    private UserEntity receiver;
     
     @ManyToOne
     @JoinColumn(name = "creator_id")
-    private User creator;
+    private UserEntity creator;
     private Integer behaviorId;
     private String comment;
     private LocalDateTime createdAt;
@@ -25,7 +25,7 @@ public class Record {
     public Record() {
     }
     
-    public Record(Integer id, String title, User receiver, User creator, Integer behaviorId, String comment, LocalDateTime createdAt) {
+    public Record(Integer id, String title, UserEntity receiver, UserEntity creator, Integer behaviorId, String comment, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.receiver = receiver;
@@ -51,19 +51,19 @@ public class Record {
         this.title = title;
     }
 
-    public User getReceiver() {
+    public UserEntity getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(UserEntity receiver) {
         this.receiver = receiver;
     }
 
-    public User getCreator() {
+    public UserEntity getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(UserEntity creator) {
         this.creator = creator;
     }
 
