@@ -1,7 +1,9 @@
 package ru.softtrack.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.HashSet;
@@ -11,6 +13,8 @@ import java.util.Set;
 @Table(name="users")
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserEntity {
     @Id
     private String id;
@@ -20,15 +24,6 @@ public class UserEntity {
     private Role role;
     private String fName;
     private String lName;
-
-    public UserEntity() {
-    }
-    
-    public UserEntity(String id, String fName, String lName) {
-        this.id = id;
-        this.fName = fName;
-        this.lName = lName;
-    }
     
     @ManyToMany
     @JoinTable(
@@ -45,21 +40,5 @@ public class UserEntity {
     @OneToMany(mappedBy = "creator")
     private Set<Record> createdRecords = new HashSet<>();
 
-
-    public Set<Record> getReceivedRecords() {
-        return receivedRecords;
-    }
-
-    public void setReceivedRecords(Set<Record> receivedRecords) {
-        this.receivedRecords = receivedRecords;
-    }
-
-    public Set<Record> getCreatedRecords() {
-        return createdRecords;
-    }
-
-    public void setCreatedRecords(Set<Record> createdRecords) {
-        this.createdRecords = createdRecords;
-    }
     
 }

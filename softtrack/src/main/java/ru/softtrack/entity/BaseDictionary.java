@@ -1,41 +1,25 @@
 package ru.softtrack.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 import java.util.Objects;
 
 @MappedSuperclass
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public abstract class BaseDictionary {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(nullable = false)
     private String name;
-
-    public BaseDictionary() {
-    }
-
-    public BaseDictionary(String name) {
-        this.name = name;
-    }
     
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    @Override
+    /*@Override
     public int hashCode() {
         return Objects.hash(id);
-    }
+    }*/
 }

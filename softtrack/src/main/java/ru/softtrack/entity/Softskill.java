@@ -1,20 +1,22 @@
 package ru.softtrack.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "softskills")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Softskill extends BaseDictionary{
 
-    public Softskill() {
-    }
-
-    public Softskill(String name) {
-        super(name);
-    }
-    
     @ManyToMany
     @JoinTable (
             name = "behavior_skill",
@@ -22,14 +24,4 @@ public class Softskill extends BaseDictionary{
             inverseJoinColumns = @JoinColumn(name = "behavior_id")
     )
     Set<Behavior> behaviors = new HashSet<>();
-
-    public Set<Behavior> getBehaviors() {
-        return behaviors;
-    }
-
-    public void setBehaviors(Set<Behavior> behaviors) {
-        this.behaviors = behaviors;
-    }
-    
-    
 }

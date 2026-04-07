@@ -1,20 +1,22 @@
 package ru.softtrack.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "roles")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role extends BaseDictionary{
 
-    public Role() {
-    }
-    
-    public Role(String name) {
-        super(name);
-    }
-    
     @ManyToMany
     @JoinTable(
             name = "role_permission",
@@ -25,22 +27,5 @@ public class Role extends BaseDictionary{
     
     @OneToMany(mappedBy = "role")
     private Set<UserEntity> users = new HashSet<>();
-
-    public Set<Permission> getPermissions() {
-        return permissions;
-    }
-
-    public void setPermissions(Set<Permission> permissions) {
-        this.permissions = permissions;
-    }
-
-    public Set<UserEntity> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<UserEntity> users) {
-        this.users = users;
-    }
-    
     
 }
