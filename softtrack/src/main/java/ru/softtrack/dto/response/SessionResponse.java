@@ -1,4 +1,4 @@
-package ru.softtrack.dto;
+package ru.softtrack.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
