@@ -13,6 +13,6 @@ public class UserService {
 
     public UserEntity findUserById(String id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found: " + id));
+                .orElseThrow(() -> new RuntimeException("Invalid login or password"));
     }
 }

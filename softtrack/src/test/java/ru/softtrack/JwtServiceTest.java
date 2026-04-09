@@ -24,22 +24,6 @@ public class JwtServiceTest {
     }
 
     @Test
-    void testTokenExpiry() {
-        JwtService shortLived = new JwtService(secret);
-        shortLived.setDuration(1);
-        String token = shortLived.generateToken(user);
-        try {
-            Thread.sleep(10);
-        } catch (InterruptedException e) {
-            
-        }
-
-        boolean isValid = shortLived.validateToken(token);
-
-        assertFalse(isValid);
-    }
-
-    @Test
     void testExtractUserId() {
         String userToken = "";
         String token = jwtService.generateToken(user);

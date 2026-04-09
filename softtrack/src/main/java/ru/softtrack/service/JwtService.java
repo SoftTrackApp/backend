@@ -20,9 +20,8 @@ import java.util.Date;
 public class JwtService {
 
     private final SecretKey key;
-    @Getter
-    @Setter
-    private int duration = 1000*60*60;
+    @Value("${jwt.expiration-ms:3600000}")
+    private int duration;
 
     public JwtService(@Value("${jwt.secret}") @NonNull String jwtSecret) {
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));;
