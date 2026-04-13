@@ -1,16 +1,19 @@
 package ru.softtrack.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.softtrack.dto.request.RecordCreateRequest;
 import ru.softtrack.dto.response.RecordResponse;
 import ru.softtrack.entity.UserEntity;
+import ru.softtrack.mapper.RecordMapper;
+import ru.softtrack.repository.RecordRepository;
 import ru.softtrack.service.RecordService;
 import ru.softtrack.service.UserService;
 import ru.softtrack.entity.Record;
@@ -22,6 +25,8 @@ public class RecordController {
 
     private final RecordService recordService;
     private final UserService userService;
+    private final RecordRepository recordRepository;
+    private final RecordMapper recordMapper;
 
     @PostMapping
     public ResponseEntity<RecordResponse> createRecord(
@@ -41,14 +46,26 @@ public class RecordController {
                 request.comment()
         );
 
-        RecordResponse response = new RecordResponse(
-                record.getId(),
-                record.getTitle(),
-                record.getBehaviorId(),
-                record.getComment(),
-                record.getCreatedAt()
-        );
+        RecordResponse response = recordMapper.toResponse(record);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getRecordsByReceiver(
+            @RequestParam String receiverId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Authentication authentication) {
+
+        UserEntity creator = userService.findUserById(authentication.getName());
+        UserEntity receiver = userService.findUserById(receiverId);
+
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+
+        Page<Record> recordsPage = recordRepository.findByCreatorAndReceiver(creator,receiver,pageable);
+        Page<RecordResponse> responsePage = recordMapper.toResponsePage(recordsPage);
+
+        return ResponseEntity.ok(responsePage);
     }
 }

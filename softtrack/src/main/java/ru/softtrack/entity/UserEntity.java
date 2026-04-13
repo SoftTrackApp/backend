@@ -32,13 +32,5 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "group_id")
     )
     private Set<Group> groups = new HashSet<>();
-
-    //TODO delete OneToMany relationships?
-    @OneToMany(mappedBy = "receiver")
-    private Set<Record> receivedRecords = new HashSet<>();
-    
-    @OneToMany(mappedBy = "creator")
-    private Set<Record> createdRecords = new HashSet<>();
-
     
 }
