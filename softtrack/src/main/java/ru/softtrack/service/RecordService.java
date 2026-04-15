@@ -3,10 +3,13 @@ package ru.softtrack.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.softtrack.entity.UserEntity;
+import ru.softtrack.exception.AccessDeniedException;
+import ru.softtrack.exception.EntityNotFoundException;
 import ru.softtrack.repository.RecordRepository;
 import ru.softtrack.entity.Record;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,5 +31,14 @@ public class RecordService {
         record.setCreatedAt(LocalDateTime.now());
 
         return recordRepository.save(record);
+    }
+
+    public void deleteRecord(Integer id, UserEntity currentUser) {
+        Record record = recordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Record.class, id));;
+
+        if (!record.getCreator().getId().equals(currentUser.getId())) {
+            throw new AccessDeniedException();
+        }
+        recordRepository.delete(record);
     }
 }

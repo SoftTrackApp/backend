@@ -7,9 +7,10 @@ import org.springframework.stereotype.Repository;
 import ru.softtrack.entity.Record;
 import ru.softtrack.entity.UserEntity;
 
+import java.util.Optional;
+
 @Repository
 public interface RecordRepository extends JpaRepository<Record, Integer> {
 
     Page<Record> findByCreatorAndReceiver(UserEntity creator, UserEntity receiver, Pageable pageable);
-
 }

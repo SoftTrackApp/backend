@@ -68,4 +68,16 @@ public class RecordController {
 
         return ResponseEntity.ok(responsePage);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRecord(
+            @PathVariable Integer id,
+            Authentication authentication) {
+
+        UserEntity currentUser = userService.findUserById(authentication.getName());
+
+        recordService.deleteRecord(id, currentUser);
+
+        return ResponseEntity.noContent().build();
+    }
 }
