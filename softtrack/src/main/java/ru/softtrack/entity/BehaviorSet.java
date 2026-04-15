@@ -6,7 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,6 +25,6 @@ public class BehaviorSet extends BaseDictionary{
             joinColumns = @JoinColumn(name = "set_id"),
             inverseJoinColumns = @JoinColumn(name = "behavior_id")
     )
-    Set<Behavior> behaviors = new HashSet<>();
+    List<Behavior> behaviors = new ArrayList<>();
     
 }

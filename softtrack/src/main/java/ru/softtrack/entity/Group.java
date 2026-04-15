@@ -19,5 +19,4 @@ public class Group extends BaseDictionary{
 
     @ManyToMany(mappedBy = "groups")
     Set<UserEntity> users = new HashSet<>();
-    
 }
