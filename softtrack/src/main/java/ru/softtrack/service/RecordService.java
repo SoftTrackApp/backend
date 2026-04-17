@@ -1,7 +1,10 @@
 package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import ru.softtrack.entity.Behavior;
 import ru.softtrack.entity.UserEntity;
 import ru.softtrack.exception.AccessDeniedException;
 import ru.softtrack.exception.EntityNotFoundException;
@@ -20,13 +23,13 @@ public class RecordService {
     public Record createRecord(String title,
                                UserEntity creator,
                                UserEntity receiver,
-                               Integer behaviorId,
+                               Behavior behavior,
                                String comment) {
         Record record = new Record();
         record.setTitle(title);
         record.setCreator(creator);
         record.setReceiver(receiver);
-        record.setBehaviorId(behaviorId);
+        record.setBehavior(behavior);
         record.setComment(comment);
         record.setCreatedAt(LocalDateTime.now());
 

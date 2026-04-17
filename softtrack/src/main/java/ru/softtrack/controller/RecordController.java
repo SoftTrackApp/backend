@@ -11,8 +11,11 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.softtrack.dto.request.RecordCreateRequest;
 import ru.softtrack.dto.response.RecordResponse;
+import ru.softtrack.entity.Behavior;
 import ru.softtrack.entity.UserEntity;
+import ru.softtrack.exception.EntityNotFoundException;
 import ru.softtrack.mapper.RecordMapper;
+import ru.softtrack.repository.BehaviorRepository;
 import ru.softtrack.repository.RecordRepository;
 import ru.softtrack.service.RecordService;
 import ru.softtrack.service.UserService;
@@ -27,6 +30,7 @@ public class RecordController {
     private final UserService userService;
     private final RecordRepository recordRepository;
     private final RecordMapper recordMapper;
+    private final BehaviorRepository behaviorRepository;
 
     @PostMapping
     public ResponseEntity<RecordResponse> createRecord(
@@ -38,11 +42,13 @@ public class RecordController {
 
         UserEntity receiver = userService.findUserById(request.receiverId());
 
+        Behavior behavior = behaviorRepository.findById(request.behaviorId()).orElseThrow(() -> new EntityNotFoundException(Behavior.class, request.behaviorId()));
+
         Record record = recordService.createRecord(
                 request.title(),
                 creator,
                 receiver,
-                request.behaviorId(),
+                behavior,
                 request.comment()
         );
 

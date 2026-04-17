@@ -28,7 +28,11 @@ public class Record {
     @ManyToOne
     @JoinColumn(name = "creator_id")
     private UserEntity creator;
-    private Integer behaviorId;
+
+    @ManyToOne
+    @JoinColumn(name = "behavior_id")
+    private Behavior behavior;
+
     private String comment;
     private LocalDateTime createdAt;
     

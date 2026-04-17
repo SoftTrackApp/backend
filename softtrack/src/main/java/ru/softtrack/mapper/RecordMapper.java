@@ -16,7 +16,7 @@ public class RecordMapper {
         return new RecordResponse(
                 record.getId(),
                 record.getTitle(),
-                record.getBehaviorId(),
+                record.getBehavior().getId(),
                 record.getComment(),
                 record.getCreatedAt()
         );
