@@ -21,12 +21,12 @@ public class UserService {
 
     public UserEntity findUserById(String id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException(UserEntity.class, id));
+                .orElseThrow(() -> new EntityNotFoundException(UserEntity.class));
     }
 
     public List<UserResponse> getUsersByGroup(Integer groupId) {
         Group group = groupRepository.findById(groupId)
-                .orElseThrow(() -> new EntityNotFoundException(Group.class, groupId));
+                .orElseThrow(() -> new EntityNotFoundException(Group.class));
 
         return group.getUsers().stream()
                 .map(user -> new UserResponse(user.getId(), user.getFName(), user.getLName()))

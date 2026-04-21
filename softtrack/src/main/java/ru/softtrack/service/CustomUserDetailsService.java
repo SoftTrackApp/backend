@@ -7,9 +7,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.softtrack.entity.Permission;
 import ru.softtrack.entity.UserEntity;
 
 import java.util.Collections;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -18,13 +22,16 @@ public class CustomUserDetailsService implements UserDetailsService {
     private final UserService userService;
 
     @Override
+    @Transactional
     public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
         UserEntity user = userService.findUserById(login);
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority(user.getRole().getName());
+        Set<SimpleGrantedAuthority> authorities = user.getRole().getPermissions().stream()
+                .map(permission -> new SimpleGrantedAuthority(permission.getName()))
+                .collect(Collectors.toSet());
         return new User(
                 user.getId(),
                 "",
-                Collections.singleton(authority)
+                authorities
         );
     }
 }

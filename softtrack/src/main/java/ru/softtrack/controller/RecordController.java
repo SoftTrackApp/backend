@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.softtrack.dto.request.RecordCreateRequest;
@@ -28,11 +29,10 @@ public class RecordController {
 
     private final RecordService recordService;
     private final UserService userService;
-    private final RecordRepository recordRepository;
     private final RecordMapper recordMapper;
-    private final BehaviorRepository behaviorRepository;
 
     @PostMapping
+    @PreAuthorize("hasAuthority('create_record')")
     public ResponseEntity<RecordResponse> createRecord(
             @RequestBody RecordCreateRequest request,
             Authentication authentication) {
@@ -42,13 +42,11 @@ public class RecordController {
 
         UserEntity receiver = userService.findUserById(request.receiverId());
 
-        Behavior behavior = behaviorRepository.findById(request.behaviorId()).orElseThrow(() -> new EntityNotFoundException(Behavior.class, request.behaviorId()));
-
         Record record = recordService.createRecord(
                 request.title(),
                 creator,
                 receiver,
-                behavior,
+                request.behaviorId(),
                 request.comment()
         );
 
@@ -58,6 +56,7 @@ public class RecordController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('create_record')")
     public ResponseEntity<?> getRecordsByReceiver(
             @RequestParam String receiverId,
             @RequestParam(defaultValue = "0") int page,
@@ -69,13 +68,13 @@ public class RecordController {
 
         Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
 
-        Page<Record> recordsPage = recordRepository.findByCreatorAndReceiver(creator,receiver,pageable);
-        Page<RecordResponse> responsePage = recordMapper.toResponsePage(recordsPage);
+        Page<RecordResponse> responsePage = recordService.getRecordByCreatorAndReceiver(creator,receiver,pageable);
 
         return ResponseEntity.ok(responsePage);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('create_record')")
     public ResponseEntity<Void> deleteRecord(
             @PathVariable Integer id,
             Authentication authentication) {

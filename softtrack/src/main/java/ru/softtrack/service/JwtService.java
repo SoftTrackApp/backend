@@ -5,15 +5,21 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import ru.softtrack.entity.Permission;
+import ru.softtrack.entity.UserEntity;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -27,11 +33,15 @@ public class JwtService {
         this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));;
     }
 
-    public String generateToken(String login) {
+    public String generateToken(UserEntity user) {
         Date now = new Date(System.currentTimeMillis());
         Date expiry = new Date(System.currentTimeMillis() + duration);
+        Set<String> permissions = user.getRole().getPermissions()
+                .stream().map(Permission::getName)
+                .collect(Collectors.toSet());
         return Jwts.builder()
-                .subject(login)
+                .subject(user.getId())
+                .claim("permissions",  permissions)
                 .issuedAt(now)
                 .expiration(expiry)
                 .signWith(key).compact();
@@ -58,4 +68,6 @@ public class JwtService {
     public String extractUserId(String token) {
         return parseClaims(token).getSubject();
     }
+
+    public List<String> extractPermissions(String token) {return parseClaims(token).get("permissions", List.class);}
 }

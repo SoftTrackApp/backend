@@ -41,7 +41,7 @@ public class AuthController {
 
         //TODO password check LDAP
 
-        String token = jwtService.generateToken(user.getId());
+        String token = jwtService.generateToken(user);
 
         cookieService.addSessionTokenToResponse(token,response);
 
