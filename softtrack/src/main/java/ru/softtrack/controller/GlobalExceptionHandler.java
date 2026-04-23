@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import ru.softtrack.exception.AccessDeniedException;
 import ru.softtrack.exception.EntityNotFoundException;
+import ru.softtrack.exception.ValidationException;
 
 import java.util.Map;
 
@@ -23,6 +24,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> handleAccessDenied(AccessDeniedException e) {
         return ResponseEntity
                 .status(HttpStatus.FORBIDDEN)
+                .body(Map.of("error", e.getMessage()));
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<?> handleBadRequest(ValidationException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", e.getMessage()));
     }
 }

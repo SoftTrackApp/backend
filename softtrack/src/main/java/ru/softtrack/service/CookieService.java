@@ -1,6 +1,5 @@
 package ru.softtrack.service;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -13,11 +12,10 @@ public class CookieService {
     @Value("${cookie.expiration:3600}")
     private int cookieMaxAge;
 
-    public void addSessionTokenToResponse(String token, HttpServletResponse response) throws ServletException {
+    public void addSessionTokenToResponse(String token, HttpServletResponse response) {
         Cookie cookie = new Cookie("session_token_cookie",token);
 
         cookie.setHttpOnly(true);
-        //TODO (change to true later)
         cookie.setSecure(false);
         cookie.setPath("/");
 
@@ -26,7 +24,7 @@ public class CookieService {
         response.addCookie(cookie);
     }
 
-    public String getSessionTokenFromRequest(HttpServletRequest request) throws ServletException {
+    public String getSessionTokenFromRequest(HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         if (cookies != null) {
             for (Cookie cookie : cookies) {
@@ -38,7 +36,7 @@ public class CookieService {
         return null;
     }
 
-    public void clearSessionToken(HttpServletResponse response) throws ServletException{
+    public void clearSessionToken(HttpServletResponse response) {
         Cookie cookie = new Cookie("session_token_cookie", null);
         cookie.setHttpOnly(true);
         cookie.setPath("/");

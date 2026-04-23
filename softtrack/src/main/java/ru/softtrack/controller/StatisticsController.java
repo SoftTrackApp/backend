@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.softtrack.dto.response.BehaviorStatResponse;
 import ru.softtrack.dto.response.SoftskillStatResponse;
-import ru.softtrack.repository.RecordRepository;
 import ru.softtrack.service.StatisticsService;
 
 import java.util.List;
@@ -18,8 +17,6 @@ import java.util.List;
 @RequestMapping("/statistics")
 @RequiredArgsConstructor
 public class StatisticsController {
-
-    private final RecordRepository recordRepository;
 
     private final StatisticsService statisticsService;
 

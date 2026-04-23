@@ -5,8 +5,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.softtrack.dto.request.SessionCreateRequest;
+import ru.softtrack.dto.response.SessionResponse;
 import ru.softtrack.entity.UserEntity;
 import ru.softtrack.service.CookieService;
 import ru.softtrack.service.JwtService;
@@ -55,5 +57,19 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    //TODO get authorized user
+    @GetMapping
+    public ResponseEntity<SessionResponse> getCurrentUser(Authentication authentication) {
+        String id = authentication.getName();
+
+        UserEntity user = userService.findUserById(id);
+
+        SessionResponse response = new SessionResponse(
+                user.getId(),
+                user.getFName(),
+                user.getLName(),
+                user.getRole().getName()
+        );
+
+        return ResponseEntity.ok(response);
+    }
 }

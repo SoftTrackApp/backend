@@ -28,7 +28,7 @@ public class StatisticsService {
 
     private void validateAccess(String requestedUserId, Authentication authentication) {
         boolean canViewAll = authentication.getAuthorities().stream().
-                anyMatch(a -> a.getAuthority().equals("view_all_dashboards"));
+                anyMatch(a -> "view_all_dashboards".equals(a.getAuthority()));
         String currentUserId = authentication.getName();
 
         if(!canViewAll && !currentUserId.equals(requestedUserId)) {

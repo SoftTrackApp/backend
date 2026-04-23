@@ -1,7 +1,6 @@
 package ru.softtrack.mapper;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 import ru.softtrack.dto.response.RecordResponse;
 import ru.softtrack.entity.Record;
@@ -20,12 +19,5 @@ public class RecordMapper {
                 record.getComment(),
                 record.getCreatedAt()
         );
-    }
-
-    public Page<RecordResponse> toResponsePage(Page<Record> recordsPage) {
-        if (recordsPage == null) {
-            return Page.empty();
-        }
-        return recordsPage.map(this::toResponse);
     }
 }

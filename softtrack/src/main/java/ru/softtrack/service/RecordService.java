@@ -9,13 +9,13 @@ import ru.softtrack.entity.Behavior;
 import ru.softtrack.entity.UserEntity;
 import ru.softtrack.exception.AccessDeniedException;
 import ru.softtrack.exception.EntityNotFoundException;
+import ru.softtrack.exception.ValidationException;
 import ru.softtrack.mapper.RecordMapper;
 import ru.softtrack.repository.BehaviorRepository;
 import ru.softtrack.repository.RecordRepository;
 import ru.softtrack.entity.Record;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +30,9 @@ public class RecordService {
                                UserEntity receiver,
                                Integer behaviorId,
                                String comment) {
+        if (creator.getId().equals(receiver.getId())) {
+            throw new ValidationException("You cannot create a record for yourself");
+        }
         Behavior behavior = behaviorRepository.findById(behaviorId)
                 .orElseThrow(() -> new EntityNotFoundException(Behavior.class));
         Record record = new Record();

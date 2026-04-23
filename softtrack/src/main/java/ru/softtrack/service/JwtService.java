@@ -4,20 +4,15 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.softtrack.entity.Permission;
 import ru.softtrack.entity.UserEntity;
-
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,7 +25,7 @@ public class JwtService {
     private int duration;
 
     public JwtService(@Value("${jwt.secret}") @NonNull String jwtSecret) {
-        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));;
+        this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     }
 
     public String generateToken(UserEntity user) {
@@ -60,7 +55,7 @@ public class JwtService {
             parseClaims(token);
             return true;
         } catch (JwtException e) {
-            log.debug("Токен невалиден: {}", e.getMessage());
+            log.debug("Invalid token: {}", e.getMessage());
             return false;
         }
     }
@@ -69,5 +64,4 @@ public class JwtService {
         return parseClaims(token).getSubject();
     }
 
-    public List<String> extractPermissions(String token) {return parseClaims(token).get("permissions", List.class);}
 }
