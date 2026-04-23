@@ -46,8 +46,13 @@ public class RecordService {
         return recordRepository.save(record);
     }
 
-    public Page<RecordResponse> getRecordByCreatorAndReceiver(UserEntity creator, UserEntity receiver, Pageable pageable) {
+    public Page<RecordResponse> getRecordsByCreatorAndReceiver(UserEntity creator, UserEntity receiver, Pageable pageable) {
         Page<Record> recordsPage = recordRepository.findByCreatorAndReceiver(creator,receiver,pageable);
+        return recordsPage.map(recordMapper::toResponse);
+    }
+
+    public Page<RecordResponse> getRecordsByReceiver(UserEntity receiver, Pageable pageable) {
+        Page<Record> recordsPage = recordRepository.findByReceiver(receiver,pageable);
         return recordsPage.map(recordMapper::toResponse);
     }
 

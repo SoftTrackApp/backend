@@ -17,6 +17,7 @@ import java.util.List;
 public interface RecordRepository extends JpaRepository<Record, Integer> {
 
     Page<Record> findByCreatorAndReceiver(UserEntity creator, UserEntity receiver, Pageable pageable);
+    Page<Record> findByReceiver(UserEntity receiver, Pageable pageable);
 
     @Query("SELECT s.id, s.name, COUNT(r) FROM Record r " +
             "JOIN r.behavior b " +

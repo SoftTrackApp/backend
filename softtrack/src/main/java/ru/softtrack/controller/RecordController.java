@@ -51,10 +51,10 @@ public class RecordController {
 
     }
 
-    @GetMapping
+    @GetMapping("/by-receiver/{receiverId}/mine")
     @PreAuthorize("hasAuthority('create_record')")
-    public ResponseEntity<?> getRecordsByReceiver(
-            @RequestParam String receiverId,
+    public ResponseEntity<?> getMyRecordsForReceiver(
+            @PathVariable("receiverId") String receiverId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             Authentication authentication) {
@@ -64,10 +64,27 @@ public class RecordController {
 
         Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
 
-        Page<RecordResponse> responsePage = recordService.getRecordByCreatorAndReceiver(creator,receiver,pageable);
+        Page<RecordResponse> responsePage = recordService.getRecordsByCreatorAndReceiver(creator,receiver,pageable);
 
         return ResponseEntity.ok(responsePage);
     }
+
+    @GetMapping("/by-receiver/{receiverId}")
+    @PreAuthorize("hasAuthority('view_all_dashboards')")
+    public ResponseEntity<?> getAllRecordsForReceiver(
+            @PathVariable("receiverId") String receiverId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+
+        UserEntity receiver = userService.findUserById(receiverId);
+
+        Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
+
+        Page<RecordResponse> responsePage = recordService.getRecordsByReceiver(receiver,pageable);
+
+        return ResponseEntity.ok(responsePage);
+    }
+
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAuthority('create_record')")
