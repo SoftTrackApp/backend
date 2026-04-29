@@ -2,6 +2,7 @@ package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.softtrack.dto.response.BehaviorResponse;
 import ru.softtrack.dto.response.BehaviorSetResponse;
 import ru.softtrack.repository.BehaviorSetRepository;
@@ -15,6 +16,7 @@ public class BehaviorSetService {
 
     private final BehaviorSetRepository behaviorSetRepository;
 
+    @Transactional(readOnly = true)
     public List<BehaviorSetResponse> getAllBehaviorSets() {
         return behaviorSetRepository.findAll().stream()
                 .map(set -> new BehaviorSetResponse(

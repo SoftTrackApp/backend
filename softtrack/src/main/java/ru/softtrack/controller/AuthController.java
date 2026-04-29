@@ -2,6 +2,7 @@ package ru.softtrack.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,7 +27,7 @@ public class AuthController {
     private final CookieService cookieService;
 
     @PostMapping
-    ResponseEntity<?> login(@RequestBody SessionCreateRequest request, HttpServletResponse response) throws ServletException {
+    ResponseEntity<?> login(@Valid @RequestBody SessionCreateRequest request, HttpServletResponse response) throws ServletException {
 
         String id = request.getLogin();
         String password = request.getPassword();

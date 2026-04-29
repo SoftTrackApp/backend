@@ -1,5 +1,6 @@
 package ru.softtrack.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,7 +31,7 @@ public class RecordController {
     @PostMapping
     @PreAuthorize("hasAuthority('create_record')")
     public ResponseEntity<RecordResponse> createRecord(
-            @RequestBody RecordCreateRequest request,
+            @Valid @RequestBody RecordCreateRequest request,
             Authentication authentication) {
 
         String currentUser = authentication.getName();

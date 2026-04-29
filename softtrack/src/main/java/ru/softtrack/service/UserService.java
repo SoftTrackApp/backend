@@ -2,6 +2,7 @@ package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.softtrack.dto.response.UserResponse;
 import ru.softtrack.entity.Group;
 import ru.softtrack.entity.UserEntity;
@@ -19,11 +20,13 @@ public class UserService {
     private final UserRepository userRepository;
     private final GroupRepository groupRepository;
 
+    @Transactional(readOnly = true)
     public UserEntity findUserById(String id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(UserEntity.class));
     }
 
+    @Transactional(readOnly = true)
     public List<UserResponse> getUsersByGroup(Integer groupId) {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(() -> new EntityNotFoundException(Group.class));
