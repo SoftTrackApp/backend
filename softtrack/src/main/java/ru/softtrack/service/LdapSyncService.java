@@ -30,7 +30,7 @@ public class LdapSyncService {
 
     private final UserRepository userRepository;
     private final UserService userService;
-
+    private final LdapUserService ldapUserService;
     private final GroupRepository groupRepository;
 
     @Scheduled(cron = "0 0 3 * * ?")
@@ -78,7 +78,9 @@ public class LdapSyncService {
                 );
                 total += users.size();
                 for (LdapUserDto user : users) {
-                    uniqueUsers.putIfAbsent(user.uid(), user);
+                    if (ldapUserService.isRealUser(user)) {
+                        uniqueUsers.putIfAbsent(user.uid(), user);
+                    }
                 }
             } catch(Exception e) {
                 log.warn("Failed to search in {}: {}", base, e.getMessage());

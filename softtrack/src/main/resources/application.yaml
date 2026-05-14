@@ -21,6 +21,7 @@ spring:
     show-sql: true
 
 ldap:
+  admin-uids: ${ADMIN_UIDS}
   user:
     search-bases: ${USER_BASES}
   group:

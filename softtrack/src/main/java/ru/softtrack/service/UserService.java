@@ -1,6 +1,7 @@
 package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.softtrack.dto.LdapUserDto;
@@ -21,10 +22,11 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final GroupRepository groupRepository;
+    //private final GroupRepository groupRepository;
     private final LdapUserService ldapUserService;
-
     private final RoleRepository roleRepository;
+    @Value("${ldap.admin-uids}")
+    private String[] adminUids;
 
     @Transactional(readOnly = true)
     public UserEntity findUserById(String id) {
@@ -96,6 +98,13 @@ public class UserService {
 
     private String determineRole(LdapUserDto ldapUser) {
         String employeeType = ldapUser.employeeType();
+        String userUid = ldapUser.uid();
+
+        for(String uid : adminUids) {
+            if (userUid.equals(uid)) {
+                return "администратор";
+            }
+        }
 
         if("teacher".equals(employeeType)) {
             return "аудитор";
