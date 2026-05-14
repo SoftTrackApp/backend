@@ -1,0 +1,50 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  ldap:
+    urls: ${LDAP_URL}
+    base: ${LDAP_BASE}
+    username: ${LDAP_USER}
+    password: ${LDAP_PASSWORD}
+
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+ldap:
+  user:
+    search-bases: ${USER_BASES}
+  group:
+    search-base: ${GROUP_BASE}
+    academic-group-description: ${ACADEMIC_DESCRIPTION}
+    speciality-group-description: ${SPECIALITY_DESCRIPTION}
+    english-group-description: ${ENGLISH_DESCRIPTION}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: 3600000
+
+cookie:
+  expiration: 3600
+
+cors:
+  allowed-origins: http://localhost:3000
+
+openapi:
+  enabled: true
+
+logging:
+  level:
+    ru.softtrack.app: DEBUG
+    # org.hibernate.SQL: DEBUG
+    # org.springframework.ldap: DEBUG
+    # org.springframework.security.ldap: DEBUG

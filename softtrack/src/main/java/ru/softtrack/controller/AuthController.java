@@ -6,6 +6,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import ru.softtrack.dto.request.SessionCreateRequest;
@@ -15,8 +17,6 @@ import ru.softtrack.service.CookieService;
 import ru.softtrack.service.JwtService;
 import ru.softtrack.service.UserService;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/session")
 @RequiredArgsConstructor
@@ -25,6 +25,7 @@ public class AuthController {
     private final UserService userService;
     private final JwtService jwtService;
     private final CookieService cookieService;
+    private final AuthenticationManager authenticationManager;
 
     @PostMapping
     ResponseEntity<?> login(@Valid @RequestBody SessionCreateRequest request, HttpServletResponse response) throws ServletException {
@@ -32,17 +33,11 @@ public class AuthController {
         String id = request.getLogin();
         String password = request.getPassword();
 
-        UserEntity user;
+        UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id,password);
 
-        try {
-            user = userService.findUserById(id);
-        } catch (RuntimeException e) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid login or password"));
-        }
+        Authentication authentication = authenticationManager.authenticate(authToken);
 
-        //TODO password check LDAP
+        UserEntity user = (UserEntity) authentication.getPrincipal();
 
         String token = jwtService.generateToken(user);
 

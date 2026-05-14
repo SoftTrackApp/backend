@@ -37,7 +37,7 @@ public class RecordController {
         String currentUser = authentication.getName();
         UserEntity creator = userService.findUserById(currentUser);
 
-        UserEntity receiver = userService.findUserById(request.receiverId());
+        UserEntity receiver = userService.findOrCreateUser(request.receiverId());
 
         Record record = recordService.createRecord(
                 request.title(),
@@ -61,7 +61,7 @@ public class RecordController {
             Authentication authentication) {
 
         UserEntity creator = userService.findUserById(authentication.getName());
-        UserEntity receiver = userService.findUserById(receiverId);
+        UserEntity receiver = userService.findOrCreateUser(receiverId);
 
         Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
 
@@ -77,7 +77,7 @@ public class RecordController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        UserEntity receiver = userService.findUserById(receiverId);
+        UserEntity receiver = userService.findOrCreateUser(receiverId);
 
         Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
 

@@ -1,6 +1,7 @@
 package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     @Transactional
-    public UserDetails loadUserByUsername(String login) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(@NonNull String login) throws UsernameNotFoundException {
         UserEntity user = userService.findUserById(login);
         Set<SimpleGrantedAuthority> authorities = user.getRole().getPermissions().stream()
                 .map(permission -> new SimpleGrantedAuthority(permission.getName()))

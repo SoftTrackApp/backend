@@ -15,6 +15,7 @@ import ru.softtrack.repository.BehaviorRepository;
 import ru.softtrack.repository.RecordRepository;
 import ru.softtrack.entity.Record;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Service
@@ -41,7 +42,7 @@ public class RecordService {
         record.setReceiver(receiver);
         record.setBehavior(behavior);
         record.setComment(comment);
-        record.setCreatedAt(LocalDateTime.now());
+        record.setCreatedAt(Instant.now());
 
         return recordRepository.save(record);
     }
