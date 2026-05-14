@@ -20,7 +20,7 @@ public class CookieService {
         cookie.setPath("/");
 
         cookie.setMaxAge(cookieMaxAge);
-        cookie.setAttribute("SameSite", "Lax");
+        cookie.setAttribute("SameSite", "None");
         response.addCookie(cookie);
     }
 

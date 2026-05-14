@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "8081:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      DB_URL: jdbc:postgresql://postgres:5432/appdb
+      DB_USER: appuser
+      DB_PASSWORD: apppass
+      LDAP_URL: ldap://openldap:389
+      LDAP_BASE: dc=example,dc=ru
+      LDAP_USER: cn=admin,dc=example,dc=ru
+      LDAP_PASSWORD: adminpass
+      JWT_SECRET: dev-secret-key-change-in-production
+      
+      USER_BASES: ou=humans
+      GROUP_BASE: ou=current
+      ACADEMIC_DESCRIPTION: АкадемГр
+      SPECIALITY_DESCRIPTION: ПрофильГр
+      ENGLISH_DESCRIPTION: АнглГр
+      
+      ADMIN_UIDS: a001
+      
+    depends_on:
+      - postgres
+      - openldap
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB: appdb
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: apppass
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  openldap:
+    image: osixia/openldap:1.5.0
+    container_name: openldap
+    environment:
+      LDAP_ORGANISATION: Example
+      LDAP_DOMAIN: example.ru
+      LDAP_ADMIN_PASSWORD: adminpass
+      LDAP_BASE_DN: dc=example,dc=ru
+    ports:
+      - "389:389"
+    volumes:
+      - ldap_data:/var/lib/ldap
+      - ./docker/ldap/ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom
+    command: --copy-service --loglevel debug
+
+volumes:
+  postgres_data:
+  ldap_data:

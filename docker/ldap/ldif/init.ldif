@@ -1,0 +1,87 @@
+# Базовая структура
+dn: dc=example,dc=ru
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+dc: example
+o: Example
+
+# Пользователи
+dn: ou=humans,dc=example,dc=ru
+objectClass: organizationalUnit
+ou: humans
+
+# Группы
+dn: ou=groups,dc=example,dc=ru
+objectClass: organizationalUnit
+ou: groups
+
+# Академическая группа
+dn: cn=АкадемГр,ou=groups,dc=example,dc=ru
+objectClass: groupOfNames
+cn: АкадемГр
+description: АкадемГр
+member: cn=i01s0001,ou=humans,dc=example,dc=ru
+member: cn=i02s0002,ou=humans,dc=example,dc=ru
+
+# Профильная группа
+dn: cn=ПрофильГр,ou=groups,dc=example,dc=ru
+objectClass: groupOfNames
+cn: ПрофильГр
+description: ПрофильГр
+member: cn=i02s0002,ou=humans,dc=example,dc=ru
+
+#Англ группа
+dn: cn=АнглГр,ou=groups,dc=example,dc=ru
+objectClass: groupOfNames
+cn: АнглГр
+description: АнглГр
+member: cn=i01s0001,ou=humans,dc=example,dc=ru
+
+# Тестовый студент
+dn: cn=i01s0001,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: i01s0001
+sn: Student
+givenName: Test
+uid: i01s0001
+mail: student@college.ru
+employeeType: student
+userPassword: password
+
+# Тестовый студент
+dn: cn=i02s0002,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: i02s0002
+sn: Student
+givenName: Test2
+uid: i02s0002
+mail: student2@college.ru
+employeeType: student
+userPassword: password
+
+# Тестовый преподаватель
+dn: cn=t001,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: t001
+sn: Teacher
+givenName: Test
+uid: t001
+mail: teacher@college.ru
+employeeType: teacher
+userPassword: password
+
+# Администратор
+dn: cn=a001,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: a001
+sn: Admin
+givenName: Test
+uid: a001
+mail: admin@college.ru
+employeeType: teacher
+userPassword: password
