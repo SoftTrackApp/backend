@@ -39,6 +39,8 @@ public class GroupService {
     private String groupBase;
     @Value("${spring.ldap.base}")
     private String ldapBase;
+    @Value("${ldap.group.filter}")
+    private String groupFilter;
     private final LdapUserService ldapUserService;
     private final Map<String, String> cnToDnCache = new ConcurrentHashMap<>();
 
@@ -53,7 +55,7 @@ public class GroupService {
         List<LdapGroupResponse> groups = ldapTemplate.search(
                 query()
                         .base(groupBase)
-                        .where("objectClass").is("groupOfNames")
+                        .where("objectClass").is(groupFilter)
                         .and("description").is(academicDescription),
                 (ContextMapper<LdapGroupResponse>) ctx -> {
                     DirContextOperations context = (DirContextOperations) ctx;
@@ -72,7 +74,7 @@ public class GroupService {
         List<LdapGroupResponse> groups = ldapTemplate.search(
                 query()
                         .base(groupBase)
-                        .where("objectClass").is("groupOfNames")
+                        .where("objectClass").is(groupFilter)
                         .and(query()
                                 .where("description").is(englishDescription)
                                 .or("description").is(specialityDescription)),

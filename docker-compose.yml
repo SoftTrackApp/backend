@@ -16,15 +16,14 @@ services:
       LDAP_USER: cn=admin,dc=example,dc=ru
       LDAP_PASSWORD: adminpass
       JWT_SECRET: dev-secret-key-change-in-production
-      
       USER_BASES: ou=humans
-      GROUP_BASE: ou=current
+      GROUP_BASE: ou=groups
       ACADEMIC_DESCRIPTION: АкадемГр
       SPECIALITY_DESCRIPTION: ПрофильГр
       ENGLISH_DESCRIPTION: АнглГр
-      
+
       ADMIN_UIDS: a001
-      
+
     depends_on:
       - postgres
       - openldap
@@ -43,15 +42,18 @@ services:
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
 
   openldap:
-    image: osixia/openldap:1.5.0
+    image: osixia/openldap:latest
     container_name: openldap
     environment:
       LDAP_ORGANISATION: Example
       LDAP_DOMAIN: example.ru
       LDAP_ADMIN_PASSWORD: adminpass
       LDAP_BASE_DN: dc=example,dc=ru
+      LDAP_RFC2307BIS_SCHEMA: true
+      LDAP_REMOVE_CONFIG_AFTER_SETUP: false
+      LDAP_SEED_INTERNAL_LDIF_PATH: /container/service/slapd/assets/config/bootstrap/ldif/custom
     ports:
-      - "389:389"
+      - 389:389
     volumes:
       - ldap_data:/var/lib/ldap
       - ./docker/ldap/ldif:/container/service/slapd/assets/config/bootstrap/ldif/custom

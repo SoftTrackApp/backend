@@ -1,0 +1,73 @@
+# Организационные единицы
+dn: ou=humans,dc=example,dc=ru
+objectClass: organizationalUnit
+ou: humans
+
+dn: ou=groups,dc=example,dc=ru
+objectClass: organizationalUnit
+ou: groups
+
+# Пользователи
+dn: cn=i01s0001,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: i01s0001
+sn: Student
+givenName: Test
+uid: i01s0001
+mail: student@college.ru
+employeeType: student
+userPassword: password
+
+dn: cn=i02s0002,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: i02s0002
+sn: Student
+givenName: Test2
+uid: i02s0002
+mail: student2@college.ru
+employeeType: student
+userPassword: password
+
+dn: cn=t001,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: t001
+sn: Teacher
+givenName: Test
+uid: t001
+mail: teacher@college.ru
+employeeType: teacher
+userPassword: password
+
+dn: cn=a001,ou=humans,dc=example,dc=ru
+objectClass: inetOrgPerson
+objectClass: person
+cn: a001
+sn: Admin
+givenName: Test
+uid: a001
+mail: admin@college.ru
+employeeType: teacher
+userPassword: password
+
+# Группы 
+dn: cn=АкадемГр,ou=groups,dc=example,dc=ru
+objectClass: groupOfUniqueNames
+cn: АкадемГр
+description: АкадемГр
+uniqueMember: cn=i01s0001,ou=humans,dc=example,dc=ru
+uniqueMember: cn=i02s0002,ou=humans,dc=example,dc=ru
+
+dn: cn=ПрофильГр,ou=groups,dc=example,dc=ru
+objectClass: groupOfUniqueNames
+cn: ПрофильГр
+description: ПрофильГр
+uniqueMember: cn=i02s0002,ou=humans,dc=example,dc=ru
+
+dn: cn=АнглГр,ou=groups,dc=example,dc=ru
+objectClass: groupOfUniqueNames
+cn: АнглГр
+description: АнглГр
+uniqueMember: cn=i01s0001,ou=humans,dc=example,dc=ru

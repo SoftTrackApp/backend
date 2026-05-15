@@ -25,6 +25,7 @@ ldap:
   user:
     search-bases: ${USER_BASES}
   group:
+    filter: groupOfUniqueNames
     search-base: ${GROUP_BASE}
     academic-group-description: ${ACADEMIC_DESCRIPTION}
     speciality-group-description: ${SPECIALITY_DESCRIPTION}
