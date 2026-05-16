@@ -27,6 +27,12 @@ public class UserService {
     private final RoleRepository roleRepository;
     @Value("${ldap.admin-uids}")
     private String[] adminUids;
+    @Value("${user.roles.admin}")
+    private String adminRole;
+    @Value("${user.roles.teacher}")
+    private String teacherRole;
+    @Value("${user.roles.student}")
+    private String studentRole;
 
     @Transactional(readOnly = true)
     public UserEntity findUserById(String id) {
@@ -102,18 +108,18 @@ public class UserService {
 
         for(String uid : adminUids) {
             if (userUid.equals(uid)) {
-                return "администратор";
+                return adminRole;
             }
         }
 
         if("teacher".equals(employeeType)) {
-            return "аудитор";
+            return teacherRole;
         }
 
         if("student".equals(employeeType)) {
-            return "студент";
+            return studentRole;
         }
-        return "студент";
+        return studentRole;
     }
 
 

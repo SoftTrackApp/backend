@@ -2,6 +2,7 @@ package ru.softtrack.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import ru.softtrack.entity.Record;
 
 @RestController
 @RequestMapping("/records")
+@Slf4j
 @RequiredArgsConstructor
 public class RecordController {
 
@@ -46,7 +48,7 @@ public class RecordController {
                 request.behaviorId(),
                 request.comment()
         );
-
+        log.info("Record created: id={}, creator={}, receiver={}", record.getId(), creator.getId(), receiver.getId());
         RecordResponse response = recordMapper.toResponse(record);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 

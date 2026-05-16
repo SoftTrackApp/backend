@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +20,7 @@ import ru.softtrack.service.UserService;
 
 @RestController
 @RequestMapping("/session")
+@Slf4j
 @RequiredArgsConstructor
 public class AuthController {
 
@@ -31,6 +33,7 @@ public class AuthController {
     ResponseEntity<?> login(@Valid @RequestBody SessionCreateRequest request, HttpServletResponse response) throws ServletException {
 
         String id = request.getLogin();
+        log.info("Login attempt for user: {}", id);
         String password = request.getPassword();
 
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(id,password);
@@ -43,6 +46,8 @@ public class AuthController {
 
         cookieService.addSessionTokenToResponse(token,response);
 
+        log.info("User logged in: {}", id);
+
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
@@ -50,6 +55,7 @@ public class AuthController {
     @DeleteMapping
     ResponseEntity<?> logout(HttpServletResponse response) throws ServletException {
         cookieService.clearSessionToken(response);
+        log.info("User logged out");
         return ResponseEntity.ok().build();
     }
 

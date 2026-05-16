@@ -1,6 +1,7 @@
 package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class RecordService {
 
@@ -61,6 +63,7 @@ public class RecordService {
         Record record = recordRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Record.class));;
 
         if (!record.getCreator().getId().equals(currentUser.getId())) {
+            log.warn("Unauthorized delete attempt: user={}", currentUser.getId());
             throw new AccessDeniedException();
         }
         recordRepository.delete(record);

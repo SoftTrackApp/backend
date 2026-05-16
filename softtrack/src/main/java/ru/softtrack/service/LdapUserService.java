@@ -19,6 +19,8 @@ public class LdapUserService {
 
     @Value("${ldap.user.search-bases}")
     private String[] USER_BASES;
+    @Value("${user.pattern}")
+    private String userPattern;
 
     public boolean authenticate(String uid, String password) {
         for (String searchBase : USER_BASES) {
@@ -57,19 +59,6 @@ public class LdapUserService {
     public boolean isRealUser(LdapUserDto ldapUser) {
         String uid = ldapUser.uid();
         if (uid == null) return false;
-
-        if (uid.matches("i\\d{2}s\\d{4}")) {
-            return true;
-        }
-
-        if (uid.matches("t\\d{3}")) {
-            return true;
-        }
-
-        if (uid.matches("a\\d{3}")) {
-            return true;
-        }
-
-        return false;
+        return uid.matches(userPattern);
     }
 }

@@ -20,6 +20,13 @@ spring:
       ddl-auto: update
     show-sql: true
 
+user:
+  pattern: ${USER_PATTERN}
+  roles:
+    admin: администратор
+    teacher: аудитор
+    student: студент
+
 ldap:
   admin-uids: ${ADMIN_UIDS}
   user:
@@ -37,6 +44,7 @@ jwt:
 
 cookie:
   expiration: 3600
+  secure: false
 
 cors:
   allowed-origins: http://localhost:3000,http://localhost:5173
@@ -46,7 +54,7 @@ openapi:
 
 logging:
   level:
-    ru.softtrack.app: DEBUG
+    ru.softtrack: DEBUG
     # org.hibernate.SQL: DEBUG
     # org.springframework.ldap: DEBUG
     # org.springframework.security.ldap: DEBUG

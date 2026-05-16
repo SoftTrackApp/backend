@@ -10,10 +10,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import ru.softtrack.dto.LdapUserDto;
-import ru.softtrack.entity.Role;
 import ru.softtrack.entity.UserEntity;
 import ru.softtrack.exception.AccessDeniedException;
-import ru.softtrack.exception.EntityNotFoundException;
 import ru.softtrack.repository.RoleRepository;
 import ru.softtrack.repository.UserRepository;
 

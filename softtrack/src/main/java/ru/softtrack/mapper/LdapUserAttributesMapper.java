@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.stereotype.Component;
 import ru.softtrack.dto.LdapUserDto;
-import ru.softtrack.service.LdapUserService;
 import ru.softtrack.utils.LdapUtils;
-
 import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
 @Component

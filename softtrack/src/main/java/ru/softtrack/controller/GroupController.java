@@ -42,7 +42,7 @@ public class GroupController {
 
     @GetMapping("/other")
     @PreAuthorize("hasAuthority('create_record')")
-    public List<LdapGroupResponse> getOthercGroups() {
+    public List<LdapGroupResponse> getOtherGroups() {
         return groupService.getOtherGroups();
     }
 

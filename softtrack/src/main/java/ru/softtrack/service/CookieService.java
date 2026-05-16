@@ -11,12 +11,14 @@ public class CookieService {
 
     @Value("${cookie.expiration:3600}")
     private int cookieMaxAge;
+    @Value("${cookie.secure:true}")
+    private boolean isSecure;
 
     public void addSessionTokenToResponse(String token, HttpServletResponse response) {
         Cookie cookie = new Cookie("session_token_cookie",token);
 
         cookie.setHttpOnly(true);
-        cookie.setSecure(false);
+        cookie.setSecure(isSecure);
         cookie.setPath("/");
 
         cookie.setMaxAge(cookieMaxAge);
