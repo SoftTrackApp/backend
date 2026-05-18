@@ -93,7 +93,7 @@ public class GroupService {
 
     public List<UserResponse> getIntersection(List<String> groups) {
         if (groups == null || groups.isEmpty()) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Must have at least 1 group");
         }
         StringBuilder filter = new StringBuilder("(&(objectClass=person)");
         for (String groupCn : groups) {

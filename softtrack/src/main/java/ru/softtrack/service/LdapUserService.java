@@ -7,7 +7,10 @@ import org.springframework.ldap.core.LdapTemplate;
 import org.springframework.stereotype.Service;
 import ru.softtrack.dto.LdapUserDto;
 import ru.softtrack.mapper.LdapUserAttributesMapper;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -21,6 +24,10 @@ public class LdapUserService {
     private String[] USER_BASES;
     @Value("${user.pattern}")
     private String userPattern;
+    @Value("${ldap.invalid-uid}")
+    private String invalidUid;
+    @Value("${ldap.user.student-base}")
+    private String studentBase;
 
     public boolean authenticate(String uid, String password) {
         for (String searchBase : USER_BASES) {
@@ -56,9 +63,28 @@ public class LdapUserService {
         return null;
     }
 
+    public List<LdapUserDto> getAllStudents() {
+        List<LdapUserDto> students = new ArrayList<>();
+        try {
+            students = ldapTemplate.search(
+                    studentBase,
+                    "(objectClass=person)",
+                    ldapUserAttributesMapper
+            );
+        } catch (Exception ignored) {
+        }
+        if (students == null || students.isEmpty()) {
+            return null;
+        } else {
+            return students.stream()
+                    .filter(this::isRealUser)
+                    .collect(Collectors.toList());
+        }
+    }
+
     public boolean isRealUser(LdapUserDto ldapUser) {
         String uid = ldapUser.uid();
         if (uid == null) return false;
-        return uid.matches(userPattern);
+        return uid.matches(userPattern) && !uid.matches(invalidUid);
     }
 }

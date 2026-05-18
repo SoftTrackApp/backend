@@ -29,7 +29,9 @@ user:
 
 ldap:
   admin-uids: ${ADMIN_UIDS}
+  invalid-uid: ${INVALID_UID}
   user:
+    student-base: ${STUDENT_BASE}
     search-bases: ${USER_BASES}
   group:
     filter: groupOfUniqueNames

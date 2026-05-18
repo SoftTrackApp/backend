@@ -23,6 +23,8 @@ services:
       ENGLISH_DESCRIPTION: АнглГр
       USER_PATTERN: '(i\d{2}s\d{4}|t\d{3}|a\d{3})'
       ADMIN_UIDS: a001
+      INVALID_UID: invalid
+      STUDENT_BASE: ou=humans
 
     depends_on:
       - postgres
