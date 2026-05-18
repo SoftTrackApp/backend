@@ -91,24 +91,31 @@ public class GroupService {
         return groups;
     }
 
-    public List<UserResponse> getIntersection(List<String> groups) {
-        if (groups == null || groups.isEmpty()) {
-            throw new IllegalArgumentException("Must have at least 1 group");
-        }
+    public List<UserResponse> getIntersection(String group, String subgroup) {
         StringBuilder filter = new StringBuilder("(&(objectClass=person)");
-        for (String groupCn : groups) {
-            if (groupCn != null) filter.append("(memberOf=").append(buildDn(groupCn)).append(")");
+
+        if (group != null && !group.isBlank()) {
+            filter.append("(memberOf=")
+                    .append(buildDn(group))
+                    .append(")");
         }
+
+        if (subgroup != null && !subgroup.isBlank()) {
+            filter.append("(memberOf=")
+                    .append(buildDn(subgroup))
+                    .append(")");
+        }
+
         filter.append(")");
 
-        log.debug("Intersection filter: {}", filter);
+        log.debug("LDAP filter: {}", filter);
 
         return ldapTemplate.search(
                 query().filter(filter.toString()),
                 (AttributesMapper<UserResponse>) attrs -> new UserResponse(
-                        LdapUtils.getAttribute(attrs,"uid"),
-                        LdapUtils.getAttribute(attrs,"givenName"),
-                        LdapUtils.getAttribute(attrs,"sn")
+                        LdapUtils.getAttribute(attrs, "uid"),
+                        LdapUtils.getAttribute(attrs, "givenName"),
+                        LdapUtils.getAttribute(attrs, "sn")
                 )
         );
     }
