@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import ru.softtrack.dto.LdapUserDto;
 import ru.softtrack.dto.request.GroupIntersectionRequest;
 import ru.softtrack.dto.response.GroupResponse;
 import ru.softtrack.dto.response.LdapGroupResponse;
@@ -11,6 +12,7 @@ import ru.softtrack.dto.response.UserResponse;
 import ru.softtrack.service.GroupService;
 import ru.softtrack.service.UserService;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -49,6 +51,12 @@ public class GroupController {
     @GetMapping("/intersection")
     @PreAuthorize("hasAuthority('create_record')")
     public List<UserResponse> getIntersection(@RequestParam List<String> group) {
-        return groupService.getIntersection(group);
+        List<UserResponse> users = groupService.getIntersection(group);
+        if (users == null || users.isEmpty()) {
+            return List.of();
+        }
+        users.sort(Comparator.comparing(UserResponse::lName)
+                .thenComparing(UserResponse::fName));
+        return users;
     }
 }
