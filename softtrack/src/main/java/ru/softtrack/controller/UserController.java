@@ -26,6 +26,9 @@ public class UserController {
     @PreAuthorize("hasAuthority('view_all_dashboards')")
     public List<UserResponse> getAllUsers() {
         List<LdapUserDto> students = ldapUserService.getAllStudents();
+        if (students == null || students.isEmpty()) {
+            return List.of();
+        }
         students.sort(Comparator.comparing(LdapUserDto::sn)
                 .thenComparing(LdapUserDto::givenName));
         return students.stream().map(user -> new UserResponse(user.uid(),user.givenName(),user.sn())).toList();
