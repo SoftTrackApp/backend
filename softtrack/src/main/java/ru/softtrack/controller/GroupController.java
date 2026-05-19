@@ -48,10 +48,7 @@ public class GroupController {
 
     @GetMapping("/intersection")
     @PreAuthorize("hasAuthority('create_record')")
-    public List<UserResponse> getIntersection(
-        @RequestParam(required = false) String group,
-        @RequestParam(required = false) String subgroup
-    ) {
-        return groupService.getIntersection(group, subgroup);
+    public List<UserResponse> getIntersection(@RequestParam List<String> group) {
+        return groupService.getIntersection(group);
     }
 }
