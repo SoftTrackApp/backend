@@ -14,6 +14,7 @@ import ru.softtrack.repository.GroupRepository;
 import ru.softtrack.repository.UserRepository;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -46,9 +47,13 @@ public class LdapSyncService {
         log.info("Syncing users from LDAP...");
 
         List<LdapUserDto> ldapUsers = fetchAllLdapUsers();
+        Set<String> ldapUids = ldapUsers.stream()
+                .map(LdapUserDto::uid)
+                .collect(Collectors.toSet());
 
         int created = 0;
         int updated = 0;
+        int deactivated = 0;
 
         for (LdapUserDto ldapUser : ldapUsers) {
             UserEntity user = userRepository.findById(ldapUser.uid()).orElse(null);
@@ -60,9 +65,23 @@ public class LdapSyncService {
                 if (userService.updateUserFromLdap(user,ldapUser)) {
                     updated++;
                 }
+
+                if (!user.isActive()) {
+                    user.setActive(true);
+                    userRepository.save(user);
+                    log.info("User reactivated: {}", user.getId());
+                }
             }
         }
-        log.info("Users sync completed: {} created, {} updated", created, updated);
+        List<UserEntity> missingUsers = userRepository.findByActiveTrueAndIdNotIn(ldapUids);
+        for (UserEntity user : missingUsers) {
+            user.setActive(false);
+            userRepository.save(user);
+            deactivated++;
+            log.info("User deactivated (not in LDAP): {}", user.getId());
+        }
+
+        log.info("Sync done: created={}, updated={}, deactivated={}", created, updated, deactivated);
     }
 
     private List<LdapUserDto> fetchAllLdapUsers() {

@@ -24,7 +24,9 @@ public class UserEntity {
     private Role role;
     private String fName;
     private String lName;
-    
+    @Column(nullable = false)
+    private boolean active = true;
+
     @ManyToMany
     @JoinTable(
             name = "user_group",
