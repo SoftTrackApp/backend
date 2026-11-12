@@ -7,6 +7,8 @@ import org.springframework.ldap.core.AttributesMapper;
 import org.springframework.ldap.core.ContextMapper;
 import org.springframework.ldap.core.DirContextOperations;
 import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.filter.AndFilter;
+import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.softtrack.dto.response.GroupResponse;
@@ -15,6 +17,7 @@ import ru.softtrack.dto.response.UserResponse;
 import ru.softtrack.repository.GroupRepository;
 import ru.softtrack.utils.LdapUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -91,33 +94,30 @@ public class GroupService {
         return groups;
     }
 
-    public List<UserResponse> getIntersection(String cn1, String cn2) {
-        StringBuilder filter = new StringBuilder("(&(objectClass=person)");
-        if (cn1 != null) filter.append("(memberOf=").append(buildDn(cn1)).append(")");
-        if (cn2 != null) filter.append("(memberOf=").append(buildDn(cn2)).append(")");
-        filter.append(")");
+    public List<UserResponse> getIntersection(List<String> groups) {
 
-        log.debug("Intersection filter: {}", filter);
+        if (groups == null || groups.isEmpty()) {
+            return Collections.emptyList();
+        }
+        AndFilter mainFilter = new AndFilter();
 
+        mainFilter.and(new EqualsFilter("objectClass", "person"));
+
+        for (String group : groups) {
+            if (group != null && !group.isBlank()) {
+                mainFilter.and(new EqualsFilter("memberOf", buildDn(group)));
+            }
+        }
         return ldapTemplate.search(
-                query().filter(filter.toString()),
-                (AttributesMapper<UserResponse>) attrs -> {
-                    return new UserResponse(
-                            LdapUtils.getAttribute(attrs,"uid"),
-                            LdapUtils.getAttribute(attrs,"givenName"),
-                            LdapUtils.getAttribute(attrs,"sn")
-                    );
-                }
+                "",
+                mainFilter.encode(),
+                (AttributesMapper<UserResponse>) attrs -> new UserResponse(
+                        LdapUtils.getAttribute(attrs, "uid"),
+                        LdapUtils.getAttribute(attrs, "givenName"),
+                        LdapUtils.getAttribute(attrs, "sn")
+                )
         );
     }
-//
-//    private AttributesMapper<UserResponse> userAttributesMapper() {
-//        return attrs -> new UserResponse(
-//                LdapUtils.getAttribute(attrs, "uid"),
-//                LdapUtils.getAttribute(attrs,"givenName"),
-//                LdapUtils.getAttribute(attrs,"sn"));
-//    }
-
     private String buildDn(String cn) {
         return "cn=" + cn + "," + groupBase + "," + ldapBase;
     }

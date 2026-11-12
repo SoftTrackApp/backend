@@ -2,6 +2,10 @@ package ru.softtrack.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.ldap.core.AttributesMapper;
+import org.springframework.ldap.core.LdapTemplate;
+import org.springframework.ldap.filter.AndFilter;
+import org.springframework.ldap.filter.EqualsFilter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.softtrack.dto.LdapUserDto;
@@ -13,6 +17,7 @@ import ru.softtrack.exception.EntityNotFoundException;
 import ru.softtrack.repository.GroupRepository;
 import ru.softtrack.repository.RoleRepository;
 import ru.softtrack.repository.UserRepository;
+import ru.softtrack.utils.LdapUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +27,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepository;
-    //private final GroupRepository groupRepository;
+    private final LdapTemplate ldapTemplate;
     private final LdapUserService ldapUserService;
     private final RoleRepository roleRepository;
     @Value("${ldap.admin-uids}")
@@ -39,16 +44,6 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException(UserEntity.class));
     }
-
-//    @Transactional(readOnly = true)
-//    public List<UserResponse> getUsersByGroup(Integer groupId) {
-//        Group group = groupRepository.findById(groupId)
-//                .orElseThrow(() -> new EntityNotFoundException(Group.class));
-//
-//        return group.getUsers().stream()
-//                .map(user -> new UserResponse(user.getId(), user.getFName(), user.getLName()))
-//                .collect(Collectors.toList());
-//    }
 
     public UserEntity findOrCreateUser(String uid, LdapUserDto ldapUser) {
         return userRepository.findById(uid)
@@ -146,5 +141,21 @@ public class UserService {
         if (changed) {
             userRepository.save(user);
         }
+    }
+
+    public List<UserResponse> getAllStudents() {
+        AndFilter filter = new AndFilter();
+        filter.and(new EqualsFilter("objectClass", "person"));
+        filter.and(new EqualsFilter("employeeType", "student"));
+
+        return ldapTemplate.search(
+                "",
+                filter.encode(),
+                (AttributesMapper<UserResponse>) attrs -> new UserResponse(
+                        LdapUtils.getAttribute(attrs, "uid"),
+                        LdapUtils.getAttribute(attrs, "givenName"),
+                        LdapUtils.getAttribute(attrs, "sn")
+                )
+        );
     }
 }

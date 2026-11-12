@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import ru.softtrack.exception.EntityNotFoundException;
 import ru.softtrack.service.CookieService;
 import ru.softtrack.service.CustomUserDetailsService;
 import ru.softtrack.service.JwtService;
@@ -36,12 +37,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (token != null && jwtService.validateToken(token)) {
             String login = jwtService.extractUserId(token);
-            UserDetails userDetails = userDetailsService.loadUserByUsername(login);
+            try {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(login);
 
-            UsernamePasswordAuthenticationToken authToken =
-                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-            SecurityContextHolder.getContext().setAuthentication(authToken);
+                SecurityContextHolder.getContext().setAuthentication(authToken);
+            } catch (EntityNotFoundException e) {
+                log.warn("User not found for token: {}. Ignoring token.", login);
+            }
         } else {
             log.debug("No valid token in request: {} {}", request.getMethod(), request.getServletPath());
         }
