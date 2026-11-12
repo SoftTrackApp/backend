@@ -47,7 +47,7 @@ cookie:
   secure: false
 
 cors:
-  allowed-origins: http://localhost:3000,http://localhost:5173
+  allowed-origins: http://localhost:3000,http://localhost:5173,http://localhost:8080
 
 openapi:
   enabled: true
@@ -55,6 +55,7 @@ openapi:
 logging:
   level:
     ru.softtrack: DEBUG
+    org.springframework.security: TRACE
     # org.hibernate.SQL: DEBUG
     # org.springframework.ldap: DEBUG
     # org.springframework.security.ldap: DEBUG
