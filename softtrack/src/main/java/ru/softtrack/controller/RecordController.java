@@ -2,6 +2,7 @@ package ru.softtrack.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import ru.softtrack.entity.Record;
 
 @RestController
 @RequestMapping("/records")
+@Slf4j
 @RequiredArgsConstructor
 public class RecordController {
 
@@ -37,7 +39,7 @@ public class RecordController {
         String currentUser = authentication.getName();
         UserEntity creator = userService.findUserById(currentUser);
 
-        UserEntity receiver = userService.findUserById(request.receiverId());
+        UserEntity receiver = userService.findOrCreateUser(request.receiverId());
 
         Record record = recordService.createRecord(
                 request.title(),
@@ -46,7 +48,7 @@ public class RecordController {
                 request.behaviorId(),
                 request.comment()
         );
-
+        log.info("Record created: id={}, creator={}, receiver={}", record.getId(), creator.getId(), receiver.getId());
         RecordResponse response = recordMapper.toResponse(record);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
@@ -61,7 +63,7 @@ public class RecordController {
             Authentication authentication) {
 
         UserEntity creator = userService.findUserById(authentication.getName());
-        UserEntity receiver = userService.findUserById(receiverId);
+        UserEntity receiver = userService.findOrCreateUser(receiverId);
 
         Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
 
@@ -77,7 +79,7 @@ public class RecordController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
 
-        UserEntity receiver = userService.findUserById(receiverId);
+        UserEntity receiver = userService.findOrCreateUser(receiverId);
 
         Pageable pageable = PageRequest.of(page,size, Sort.by("createdAt").descending());
 

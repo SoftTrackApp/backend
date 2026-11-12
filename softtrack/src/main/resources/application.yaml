@@ -1,0 +1,62 @@
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  ldap:
+    urls: ${LDAP_URL}
+    base: ${LDAP_BASE}
+    username: ${LDAP_USER}
+    password: ${LDAP_PASSWORD}
+
+  jpa:
+    properties:
+      hibernate:
+        default_schema: public
+        format_sql: true
+        use_sql_comments: true
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+user:
+  pattern: ${USER_PATTERN}
+  roles:
+    admin: администратор
+    teacher: аудитор
+    student: студент
+
+ldap:
+  admin-uids: ${ADMIN_UIDS}
+  invalid-uid: ${INVALID_UID}
+  user:
+    student-base: ${STUDENT_BASE}
+    search-bases: ${USER_BASES}
+  group:
+    filter: groupOfUniqueNames
+    search-base: ${GROUP_BASE}
+    academic-group-description: ${ACADEMIC_DESCRIPTION}
+    speciality-group-description: ${SPECIALITY_DESCRIPTION}
+    english-group-description: ${ENGLISH_DESCRIPTION}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration-ms: 3600000
+
+cookie:
+  expiration: 3600
+  secure: false
+
+cors:
+  allowed-origins: http://localhost:3000,http://localhost:5173
+
+openapi:
+  enabled: true
+
+logging:
+  level:
+    ru.softtrack: DEBUG
+    # org.hibernate.SQL: DEBUG
+    # org.springframework.ldap: DEBUG
+    # org.springframework.security.ldap: DEBUG
