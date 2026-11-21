@@ -21,7 +21,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/students")
-    @PreAuthorize("hasAuthority('view_all_dashboards'')")
+    @PreAuthorize("hasAuthority('view_all_dashboards')")
     public List<UserResponse> getStudents() {
         return userService.getAllStudents();
     }
