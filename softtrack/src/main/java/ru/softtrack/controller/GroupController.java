@@ -7,6 +7,7 @@ import ru.softtrack.dto.response.LdapGroupResponse;
 import ru.softtrack.dto.response.UserResponse;
 import ru.softtrack.service.GroupService;
 
+import java.util.Comparator;
 import java.util.List;
 
 @RestController
@@ -31,6 +32,12 @@ public class GroupController {
     @GetMapping("/intersection")
     @PreAuthorize("hasAuthority('create_record')")
     public List<UserResponse> getIntersection( @RequestParam(name = "group", required = false) List<String> groups) {
-        return groupService.getIntersection(groups);
+        List<UserResponse> users = groupService.getIntersection(groups);
+        if (users == null || users.isEmpty()) {
+            return List.of();
+        }
+        users.sort(Comparator.comparing(UserResponse::lName)
+                .thenComparing(UserResponse::fName));
+        return users;
     }
 }

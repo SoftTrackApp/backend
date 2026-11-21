@@ -19,6 +19,7 @@ import ru.softtrack.repository.RoleRepository;
 import ru.softtrack.repository.UserRepository;
 import ru.softtrack.utils.LdapUtils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -144,18 +145,27 @@ public class UserService {
     }
 
     public List<UserResponse> getAllStudents() {
-        AndFilter filter = new AndFilter();
-        filter.and(new EqualsFilter("objectClass", "person"));
-        filter.and(new EqualsFilter("employeeType", "student"));
-
-        return ldapTemplate.search(
-                "",
-                filter.encode(),
-                (AttributesMapper<UserResponse>) attrs -> new UserResponse(
-                        LdapUtils.getAttribute(attrs, "uid"),
-                        LdapUtils.getAttribute(attrs, "givenName"),
-                        LdapUtils.getAttribute(attrs, "sn")
-                )
-        );
+        List<LdapUserDto> students = ldapUserService.getAllStudentsFromLdap();
+        if (students.isEmpty()) {
+            return List.of();
+        }
+        students.sort(Comparator.comparing(LdapUserDto::sn)
+                .thenComparing(LdapUserDto::givenName));
+        return students.stream()
+                .map(u -> new UserResponse(u.uid(), u.givenName(), u.sn()))
+                .toList();
+//        AndFilter filter = new AndFilter();
+//        filter.and(new EqualsFilter("objectClass", "person"));
+//        filter.and(new EqualsFilter("employeeType", "student"));
+//
+//        return ldapTemplate.search(
+//                "",
+//                filter.encode(),
+//                (AttributesMapper<UserResponse>) attrs -> new UserResponse(
+//                        LdapUtils.getAttribute(attrs, "uid"),
+//                        LdapUtils.getAttribute(attrs, "givenName"),
+//                        LdapUtils.getAttribute(attrs, "sn")
+//                )
+//        );
     }
 }
